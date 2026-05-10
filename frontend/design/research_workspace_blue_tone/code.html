@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALFA CORE | Institutional Research Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "error": "#ffb4ab",
+                  "surface-dim": "#10131a",
+                  "primary-fixed": "#d8e2ff",
+                  "tertiary-container": "#8292aa",
+                  "on-background": "#e1e2ec",
+                  "secondary-fixed": "#62fae3",
+                  "surface-variant": "#32353c",
+                  "inverse-primary": "#005ac2",
+                  "on-primary-fixed": "#001a42",
+                  "surface-container-high": "#272a31",
+                  "background": "#10131a",
+                  "inverse-on-surface": "#2e3038",
+                  "surface-container-low": "#191b23",
+                  "on-tertiary-fixed-variant": "#38485d",
+                  "tertiary": "#b7c8e1",
+                  "on-surface-variant": "#c2c6d6",
+                  "primary": "#adc6ff",
+                  "on-secondary-fixed-variant": "#005047",
+                  "on-primary-container": "#00285d",
+                  "on-secondary": "#003731",
+                  "on-error-container": "#ffdad6",
+                  "on-error": "#690005",
+                  "on-tertiary-container": "#1a2b3e",
+                  "on-secondary-fixed": "#00201c",
+                  "on-primary-fixed-variant": "#004395",
+                  "secondary": "#44e2cd",
+                  "surface-tint": "#adc6ff",
+                  "surface-bright": "#363941",
+                  "surface-container-lowest": "#0b0e15",
+                  "surface-container": "#1d2027",
+                  "on-tertiary-fixed": "#0b1c30",
+                  "surface": "#10131a",
+                  "primary-container": "#4d8eff",
+                  "outline-variant": "#424754",
+                  "error-container": "#93000a",
+                  "on-tertiary": "#213145",
+                  "on-secondary-container": "#004d44",
+                  "primary-fixed-dim": "#adc6ff",
+                  "on-surface": "#e1e2ec",
+                  "secondary-fixed-dim": "#3cddc7",
+                  "secondary-container": "#03c6b2",
+                  "tertiary-fixed": "#d3e4fe",
+                  "surface-container-highest": "#32353c",
+                  "on-primary": "#002e6a",
+                  "outline": "#8c909f",
+                  "inverse-surface": "#e1e2ec",
+                  "tertiary-fixed-dim": "#b7c8e1"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "margin-mobile": "16px",
+                  "unit": "4px",
+                  "gutter": "16px",
+                  "margin-desktop": "32px",
+                  "container-max": "1440px"
+          },
+          "fontFamily": {
+                  "body-lg": ["Manrope"],
+                  "body-md": ["Manrope"],
+                  "headline-lg": ["Manrope"],
+                  "headline-md": ["Manrope"],
+                  "label-sm": ["Manrope"],
+                  "data-mono": ["JetBrains Mono"]
+          },
+          "fontSize": {
+                  "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400"}],
+                  "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0", "fontWeight": "400"}],
+                  "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                  "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                  "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                  "data-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #32353c; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #424754; }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- TopNavBar Implementation -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-surface-container/80 backdrop-blur-md border-b border-outline-variant/30">
+<div class="flex items-center gap-8">
+<span class="text-headline-md font-headline-md text-primary tracking-tight">ALFA CORE</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-lg text-body-lg transition-colors duration-200" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium font-body-lg text-body-lg hover:text-primary transition-colors duration-200" href="#">Library</a>
+<a class="text-on-surface-variant font-medium font-body-lg text-body-lg hover:text-primary transition-colors duration-200" href="#">System Health</a>
+<a class="text-on-surface-variant font-medium font-body-lg text-body-lg hover:text-primary transition-colors duration-200" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-lowest border-none rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Search funds or reports..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform scale-95 active:scale-90">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform scale-95 active:scale-90">help_outline</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-transform scale-95 active:scale-90">account_circle</button>
+</div>
+</header>
+<!-- SideNavBar Implementation -->
+<aside class="fixed left-0 top-0 h-full w-60 flex flex-col pt-16 bg-surface-container-low border-r border-outline-variant/30 hidden md:flex">
+<div class="p-6 flex flex-col gap-1">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<div>
+<p class="text-on-surface font-bold leading-tight">Institutional Research</p>
+<p class="text-on-surface-variant/70 text-xs uppercase tracking-wider">Workspace Alpha</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary bg-secondary-container/10 border-r-2 border-secondary font-label-sm text-label-sm transition-all duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant/70 font-label-sm text-label-sm hover:bg-surface-variant/50 hover:text-on-surface transition-all duration-150" href="#">
+<span class="material-symbols-outlined">library_books</span> Library
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant/70 font-label-sm text-label-sm hover:bg-surface-variant/50 hover:text-on-surface transition-all duration-150" href="#">
+<span class="material-symbols-outlined">health_and_safety</span> System Health
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant/70 font-label-sm text-label-sm hover:bg-surface-variant/50 hover:text-on-surface transition-all duration-150" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+        </a>
+</nav>
+<button class="mt-8 mx-2 py-3 bg-primary text-on-primary rounded-lg font-bold flex items-center justify-center gap-2 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-lg">add</span> New Analysis
+      </button>
+</div>
+<div class="mt-auto p-6 border-t border-outline-variant/20">
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant/70 font-label-sm text-label-sm hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">contact_support</span> Support
+        </a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant/70 font-label-sm text-label-sm hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span> Sign Out
+        </a>
+</nav>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="md:ml-60 pt-16 h-screen flex flex-col bg-surface-dim">
+<div class="flex-1 flex overflow-hidden">
+<!-- Central AI Analysis Area -->
+<section class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Dashboard Header -->
+<div class="flex items-end justify-between border-b border-outline-variant/30 pb-4">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Liquidity Risk Assessment</h1>
+<p class="text-on-surface-variant flex items-center gap-2 mt-1">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+              Vanguard International Growth Fund (VWIGX) • Q4 2023 Portfolio Scan
+            </p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-lg text-sm font-medium transition-colors border border-outline-variant/30">Export PDF</button>
+<button class="px-4 py-2 bg-primary-container text-on-primary-container hover:bg-primary/30 rounded-lg text-sm font-bold transition-colors">Refine Parameters</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-4">
+<!-- Primary Intelligence Card -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container rounded-xl p-6 border border-outline-variant/30 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-primary"></div>
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">auto_awesome</span>
+<h2 class="text-headline-md font-headline-md">AI Insights Summary</h2>
+</div>
+<div class="flex items-center gap-2 text-xs font-data-mono text-secondary px-2 py-1 bg-secondary/10 rounded">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                LIVE ANALYSIS
+              </div>
+</div>
+<div class="space-y-4 text-on-surface-variant leading-relaxed">
+<p>Based on current market volatility and the fund's concentrated position in European tech equities (18.4% of NAV), ALFA CORE identifies a <span class="text-error font-bold">moderate-high liquidity risk</span> profile for a 5-day redemption window.</p>
+<div class="grid grid-cols-3 gap-4 my-6">
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant/60 font-bold mb-1">Redemption Coverage</p>
+<p class="text-headline-md font-data-mono text-primary">1.42x</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Tier 1 Liquid Assets</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant/60 font-bold mb-1">Concentration HHI</p>
+<p class="text-headline-md font-data-mono text-secondary">0.185</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Moderate Cluster Risk</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant/60 font-bold mb-1">Avg. Days to Liquidate</p>
+<p class="text-headline-md font-data-mono text-on-surface">3.8</p>
+<p class="text-[10px] text-on-surface-variant mt-1">Full Exit Capability</p>
+</div>
+</div>
+<p class="italic text-sm border-l-2 border-primary/40 pl-4 py-1">"The primary bottleneck is identified in the OTC derivatives layer, where margin calls in a 2-standard-deviation event could exhaust available cash reserves within 48 hours."</p>
+</div>
+</div>
+<!-- Quick Actions / Mini Charts -->
+<div class="col-span-12 lg:col-span-4 space-y-4">
+<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/30 flex flex-col justify-center h-full">
+<h3 class="text-label-sm font-label-sm text-on-surface-variant/70 uppercase mb-4">Historical Stress Trend</h3>
+<div class="h-32 flex items-end gap-1">
+<div class="flex-1 bg-outline-variant/30 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-outline-variant/30 rounded-t h-[55%]"></div>
+<div class="flex-1 bg-outline-variant/30 rounded-t h-[45%]"></div>
+<div class="flex-1 bg-primary/40 rounded-t h-[70%]"></div>
+<div class="flex-1 bg-primary/60 rounded-t h-[85%]"></div>
+<div class="flex-1 bg-secondary rounded-t h-[100%] shadow-[0_0_15px_rgba(68,226,205,0.3)]"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-data-mono text-on-surface-variant/60 uppercase">
+<span>Aug</span>
+<span>Sep</span>
+<span>Oct</span>
+<span>Nov</span>
+</div>
+</div>
+</div>
+<!-- Secondary Data Grid -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-low/50 backdrop-blur-sm rounded-xl p-5 border border-outline-variant/20 hover:border-primary/40 transition-colors group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">water_drop</span>
+<span class="text-xs font-data-mono text-on-surface-variant">+4.2% YoY</span>
+</div>
+<h4 class="font-bold text-on-surface">Cash Buffer</h4>
+<p class="text-sm text-on-surface-variant mt-1">Sufficient for 15% redemption spike without selling core tech holdings.</p>
+</div>
+<div class="bg-surface-container-low/50 backdrop-blur-sm rounded-xl p-5 border border-outline-variant/20 hover:border-secondary/40 transition-colors group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-secondary group-hover:scale-110 transition-transform">hub</span>
+<span class="text-xs font-data-mono text-on-surface-variant">Stable</span>
+</div>
+<h4 class="font-bold text-on-surface">Market Depth</h4>
+<p class="text-sm text-on-surface-variant mt-1">Correlation with STOXX 600 suggests narrowing liquidity in adverse markets.</p>
+</div>
+<div class="bg-surface-container-low/50 backdrop-blur-sm rounded-xl p-5 border border-outline-variant/20 hover:border-error/40 transition-colors group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-error group-hover:scale-110 transition-transform">warning</span>
+<span class="text-xs font-data-mono text-error">Warning</span>
+</div>
+<h4 class="font-bold text-on-surface">Asset Gating</h4>
+<p class="text-sm text-on-surface-variant mt-1">Foundational lock-up period for PE holdings ends in March 2024.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Source Citations Panel -->
+<aside class="w-80 bg-surface-container-low border-l border-outline-variant/30 flex flex-col hidden xl:flex">
+<div class="p-4 border-b border-outline-variant/30 bg-surface-container">
+<h3 class="text-label-sm font-label-sm text-on-surface font-bold uppercase flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">menu_book</span> Source Citations
+          </h3>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<!-- Citation 1 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant/20 hover:border-primary/40 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] px-1.5 py-0.5 bg-primary/20 text-primary font-bold rounded">DOC_REF_774</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant">open_in_new</span>
+</div>
+<p class="text-xs font-bold text-on-surface mb-1">VWIGX Annual Prospectus (2023)</p>
+<p class="text-[11px] text-on-surface-variant line-clamp-2">"The Fund maintains a baseline 5% liquid reserve in G7 sovereign debt and short-term cash equivalents..."</p>
+</div>
+<!-- Citation 2 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant/20 hover:border-primary/40 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] px-1.5 py-0.5 bg-secondary/20 text-secondary font-bold rounded">SEC_13F_Q3</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant">open_in_new</span>
+</div>
+<p class="text-xs font-bold text-on-surface mb-1">Portfolio Disclosure - Nov 14</p>
+<p class="text-[11px] text-on-surface-variant line-clamp-2">Listing of Level 3 assets including private equity stakes in European data infrastructure firms.</p>
+</div>
+<!-- Citation 3 -->
+<div class="p-3 rounded-lg bg-surface-container border border-outline-variant/20 hover:border-primary/40 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] px-1.5 py-0.5 bg-tertiary-container/20 text-tertiary font-bold rounded">INTERNAL_01</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant">lock</span>
+</div>
+<p class="text-xs font-bold text-on-surface mb-1">Risk Committee Notes - Dec 01</p>
+<p class="text-[11px] text-on-surface-variant line-clamp-2">"Committee consensus on increasing liquidity tiering due to potential macro instability in APAC sectors."</p>
+</div>
+<!-- Visual Placeholder -->
+<div class="rounded-lg overflow-hidden border border-outline-variant/20 mt-6">
+<img class="w-full h-32 object-cover opacity-60" data-alt="A sophisticated financial terminal screen displaying multiple overlapping glass-morphic data windows. The interface is dominated by deep navy and oceanic blues with bright neon-cyan sparklines and technical indicators. Subtle lighting effects highlight complex data tables and organizational charts, creating a sense of high-end institutional power and precision. The overall aesthetic is clean, professional, and technologically advanced." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDab6ZLzuWCJeRcisraPNhCgW6C4O3-MU5mZnBE4hwITbMgg4pmrOBOS1TCgvQ0iRJ83802sBbjNK-aWuYWtFFhzm0rcb5qmAsYsJ54aXOU0BaQNlpTuVTUqwk7nxrwJrK98M0u1JMeys8h53Jv1r9RzsM6AGOMeFC6Vz2jB2JgxMkXWswzvQjixAPATlXiHla5oGsqGUaujv37PACXfm0DUVvidFQNpG8efoHw02Lr-wjhwa0tTgbiWYFvdz0udL9ZsdpUj6Lv5_s"/>
+</div>
+</div>
+</aside>
+</div>
+<!-- Chat Input / Ask ALFA -->
+<footer class="p-4 bg-surface-container-low border-t border-outline-variant/30">
+<div class="max-w-4xl mx-auto relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl blur opacity-25 group-focus-within:opacity-100 transition-opacity"></div>
+<div class="relative flex items-center bg-surface-container border border-outline-variant/40 rounded-xl px-4 py-3 gap-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<input class="flex-1 bg-transparent border-none text-on-surface focus:ring-0 placeholder-on-surface-variant/50" placeholder="Ask ALFA anything about this fund's risk profile..." type="text"/>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-colors">attach_file</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-colors">mic</button>
+<div class="w-px h-6 bg-outline-variant/40 mx-1"></div>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center transition-transform active:scale-90 shadow-[0_0_10px_rgba(173,198,255,0.4)]">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+<div class="flex justify-center gap-4 mt-2 text-[10px] text-on-surface-variant/60 uppercase font-data-mono">
+<span>Alt + K for KB</span>
+<span>Shift + Enter for new line</span>
+<span>Tab to switch sources</span>
+</div>
+</div>
+</footer>
+</main>
+<!-- Mobile Navigation Placeholder -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container border-t border-outline-variant/30 flex justify-around p-4 z-50">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="material-symbols-outlined text-on-surface-variant">library_books</span>
+<span class="material-symbols-outlined text-on-surface-variant">health_and_safety</span>
+<span class="material-symbols-outlined text-on-surface-variant">settings</span>
+</div>
+</body></html>
