@@ -2,10 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'motion/react';
-import { useNavigate } from 'react-router-dom';
 import {
-  Send, Sparkles, Loader2, Plus, MessageSquare,
-  Paperclip, Mic, Brain, Trash2, X, Globe, Upload, ChevronLeft, Menu
+  Send, Loader2, Plus, MessageSquare,
+  Paperclip, Brain, Trash2, X, Globe, Upload, Menu
 } from 'lucide-react';
 
 /* ─── Types ─────────────────────────────────────────────── */
@@ -13,35 +12,7 @@ interface Citation { content: string; fund_name?: string; page?: string; source?
 interface Message { id: string; type: 'user' | 'assistant'; content: string; time: string; citations?: { internal: Citation[]; web: Citation[] }; traceInfo?: { latency_ms?: number; cost_usd?: number; chunks_retrieved?: number; chunks_after_rerank?: number }; }
 interface Session { id: string; title: string; messages: Message[]; }
 
-/* ─── Typewriter ─────────────────────────────────────────── */
-const TypewriterMessage = ({ msgId, content, typedRef }: { msgId: string; content: string; typedRef: React.MutableRefObject<Set<string>>; }) => {
-  const isNew = !typedRef.current.has(msgId);
-  const [displayed, setDisplayed] = useState(isNew ? '' : content);
-  useEffect(() => {
-    if (!isNew) { setDisplayed(content); return; }
-    typedRef.current.add(msgId);
-    let i = 0;
-    const t = setInterval(() => {
-      i += 4;
-      if (i >= content.length) { setDisplayed(content); clearInterval(t); }
-      else setDisplayed(content.substring(0, i));
-    }, 12);
-    return () => clearInterval(t);
-  }, [content, isNew, msgId, typedRef]);
-  return (
-    <div className="prose prose-invert prose-sm max-w-none prose-p:leading-relaxed prose-p:my-2 prose-pre:bg-[#1e1e2e] prose-pre:border prose-pre:border-white/10 prose-code:text-[#adc6ff] prose-strong:text-white prose-headings:text-white">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayed}</ReactMarkdown>
-    </div>
-  );
-};
 
-/* ─── Suggested prompts ──────────────────────────────────── */
-const SUGGESTIONS = [
-  'Summarize the key risk factors',
-  'What are the management fees?',
-  'Compare fund performance vs benchmark',
-  'Explain the investment strategy',
-];
 
 import { NavMenu } from '../components/Layout';
 
@@ -78,7 +49,7 @@ export default function ResearchWorkspace() {
   const recognitionRef = useRef<any>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const typedRef = useRef<Set<string>>(new Set(['__welcome__']));
+
 
   /* persist */
   useEffect(() => { localStorage.setItem('alfa_sessions', JSON.stringify(sessions)); }, [sessions]);
@@ -117,6 +88,7 @@ export default function ResearchWorkspace() {
     r.onend = () => setIsListening(false);
     recognitionRef.current = r; r.start();
   };
+  void toggleVoice; // suppress unused warning — called from voice button if wired up
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();

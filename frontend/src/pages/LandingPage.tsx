@@ -1,18 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { ChevronRight, Menu, Search, Sparkles, FileText, Globe, BarChart3, Shield, Layers, Zap } from 'lucide-react';
+import { ChevronRight, Menu, Sparkles, FileText, Globe, BarChart3, Shield, Layers, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const LogoMark = ({ className = "w-8 h-8" }: { className?: string }) => (
-  <div className={`${className} rounded-xl bg-[#050505] shadow-[0_0_10px_rgba(255,255,255,0.15)] border border-white/10 overflow-hidden flex items-center justify-center`}>
-    <img 
-      src="/logo.png" 
-      alt="Logo" 
-      className="w-full h-full object-cover scale-[1.1]" 
-      onError={(e) => { e.currentTarget.style.display = 'none'; }} 
-    />
-  </div>
-);
 
 const CTAButton = ({ label, to }: { label: string; to: string }) => (
   <Link to={to}>

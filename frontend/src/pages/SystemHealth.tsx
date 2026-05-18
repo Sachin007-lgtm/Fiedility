@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import Layout from '../components/Layout';
 
@@ -13,9 +13,7 @@ const INIT_LOGS: SysLog[] = [
   { id:6, time:'14:21:28', level:'INFO', message:'Periodic health check: 212/212 services nominal.' },
 ];
 
-const logColor: Record<string,string> = {
-  INFO:'text-secondary', WARN:'text-error', EXEC:'text-primary-fixed',
-};
+
 
 function now() { return new Date().toLocaleTimeString('en-US',{hour12:false}); }
 
@@ -39,21 +37,7 @@ export default function SystemHealth() {
 
   useEffect(() => { logEnd.current?.scrollIntoView({behavior:'smooth'}); }, [logs]);
 
-  const kpiCards = [
-    {
-      label:'LLM Inference Latency', value:'124', unit:'ms', trend:'-4.2%',
-      trendColor:'text-secondary', trendIcon:'trending_down',
-      sparkPath:'M0 35 Q 10 30, 20 32 T 40 10 T 60 25 T 80 15 T 100 20',
-    },
-    {
-      label:'Vector Embeddings', value:'1.42', unit:'B',
-      sub:'Namespace: alpha_embeddings_prod', subRight:'ACTIVE', progress:68,
-    },
-    {
-      label:'GPU Cluster Load', value:'92.4%', unit:'',
-      warn:'Node-07 High Temp', nodes:'64 Nodes Online',
-    },
-  ];
+
 
   return (
     <Layout title="System Health">

@@ -19,6 +19,12 @@ groq==0.9.0
 # Web search (existing)
 duckduckgo-search==6.2.4
 
+# Auth & DB
+bcrypt==4.1.3
+PyJWT==2.8.0
+motor==3.7.1
+python-dotenv==1.0.1
+
 # Monitoring / eval
 # (no extra deps needed — all stdlib + above)
 

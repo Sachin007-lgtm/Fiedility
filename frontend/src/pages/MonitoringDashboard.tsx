@@ -17,37 +17,6 @@ const STAGE_LABELS: Record<string, string> = {
   total: "Total (end-to-end)",
 };
 
-function StatCard({ label, value, sub, accent }: { label: string; value: string | number; sub?: string; accent?: string }) {
-  return (
-    <div className="bg-surface-container border border-outline-variant/20 rounded-xl p-5 flex flex-col gap-1"
-      style={{ backdropFilter: "blur(12px)" }}>
-      <span className="text-[11px] text-on-surface-variant uppercase tracking-widest font-semibold">{label}</span>
-      <span className="text-3xl font-bold font-mono" style={{ color: accent ?? "var(--tw-text-opacity, #e1e2ec)" }}
-        >{value}</span>
-      {sub && <span className="text-[11px] text-on-surface-variant/60">{sub}</span>}
-    </div>
-  );
-}
-
-function LatencyBar({ label, p50, p95, color }: { label: string; p50: number; p95: number; color: string }) {
-  const maxMs = 4000;
-  return (
-    <div className="py-3 border-b border-outline-variant/20 last:border-0">
-      <div className="flex justify-between text-sm mb-2">
-        <span className="font-medium text-on-surface">{label}</span>
-        <span className="text-on-surface-variant font-mono text-xs">
-          p50: <b className="text-on-surface">{p50}ms</b> &nbsp; p95: <b className="text-on-surface">{p95}ms</b>
-        </span>
-      </div>
-      <div className="relative h-2 bg-surface-variant/40 rounded-full overflow-hidden">
-        <div className="absolute inset-y-0 left-0 rounded-full opacity-60"
-          style={{ width: `${Math.min((p50 / maxMs) * 100, 100)}%`, background: color }} />
-        <div className="absolute inset-y-0 left-0 rounded-full opacity-25"
-          style={{ width: `${Math.min((p95 / maxMs) * 100, 100)}%`, background: color }} />
-      </div>
-    </div>
-  );
-}
 
 function CitationGauge({ rate }: { rate: number }) {
   const pct = Math.round(rate * 100);
