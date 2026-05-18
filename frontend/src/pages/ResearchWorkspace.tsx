@@ -2,183 +2,101 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Search, Upload, FileText, Send, Sparkles, Loader2, 
-  BookOpen, Menu, Check, Plus, MessageSquare, 
-  Paperclip, Mic, Brain, Trash2, X, Globe
+import { useNavigate } from 'react-router-dom';
+import {
+  Send, Sparkles, Loader2, Plus, MessageSquare,
+  Paperclip, Mic, Brain, Trash2, X, Globe, Upload, ChevronLeft, Menu
 } from 'lucide-react';
 
-interface Citation {
-  content: string;
-  fund_name: string;
-  page: string;
-  title?: string;
-  url?: string;
-}
+/* ─── Types ─────────────────────────────────────────────── */
+interface Citation { content: string; fund_name?: string; page?: string; source?: string; excerpt?: string; url?: string; title?: string; chunk_id?: string; }
+interface Message { id: string; type: 'user' | 'assistant'; content: string; time: string; citations?: { internal: Citation[]; web: Citation[] }; traceInfo?: { latency_ms?: number; cost_usd?: number; chunks_retrieved?: number; chunks_after_rerank?: number }; }
+interface Session { id: string; title: string; messages: Message[]; }
 
-interface Message {
-  id: string;
-  type: 'user' | 'assistant';
-  content: string;
-  time: string;
-  citations?: {
-    internal: Citation[];
-    web: Citation[];
-  };
-}
-
-interface Session {
-  id: string;
-  title: string;
-  messages: Message[];
-}
-
-const TypewriterMessage = ({ msgId, content, typedRef }: { msgId: string, content: string, typedRef: React.MutableRefObject<Set<string>> }) => {
+/* ─── Typewriter ─────────────────────────────────────────── */
+const TypewriterMessage = ({ msgId, content, typedRef }: { msgId: string; content: string; typedRef: React.MutableRefObject<Set<string>>; }) => {
   const isNew = !typedRef.current.has(msgId);
-  const [displayedContent, setDisplayedContent] = useState(isNew ? '' : content);
-  
+  const [displayed, setDisplayed] = useState(isNew ? '' : content);
   useEffect(() => {
-    if (!isNew) {
-      setDisplayedContent(content);
-      return;
-    }
+    if (!isNew) { setDisplayed(content); return; }
     typedRef.current.add(msgId);
-    
-    let index = 0;
-    const timer = setInterval(() => {
-      index += 3; 
-      if (index >= content.length) {
-        setDisplayedContent(content);
-        clearInterval(timer);
-      } else {
-        setDisplayedContent(content.substring(0, index));
-      }
-    }, 15);
-    
-    return () => clearInterval(timer);
+    let i = 0;
+    const t = setInterval(() => {
+      i += 4;
+      if (i >= content.length) { setDisplayed(content); clearInterval(t); }
+      else setDisplayed(content.substring(0, i));
+    }, 12);
+    return () => clearInterval(t);
   }, [content, isNew, msgId, typedRef]);
-
   return (
-    <div className="prose prose-invert prose-sm max-w-none prose-p:leading-relaxed prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10 prose-strong:text-white">
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {displayedContent}
-      </ReactMarkdown>
+    <div className="prose prose-invert prose-sm max-w-none prose-p:leading-relaxed prose-p:my-2 prose-pre:bg-[#1e1e2e] prose-pre:border prose-pre:border-white/10 prose-code:text-[#adc6ff] prose-strong:text-white prose-headings:text-white">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{displayed}</ReactMarkdown>
     </div>
   );
 };
 
+/* ─── Suggested prompts ──────────────────────────────────── */
+const SUGGESTIONS = [
+  'Summarize the key risk factors',
+  'What are the management fees?',
+  'Compare fund performance vs benchmark',
+  'Explain the investment strategy',
+];
+
+import { NavMenu } from '../components/Layout';
+
+/* ─── Main Component ─────────────────────────────────────── */
 export default function ResearchWorkspace() {
-  // Session State with Persistence
+  const [user] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('alfa_user') || '{}'); }
+    catch { return {}; }
+  });
+  const userName = user?.name || 'Fidelity Analyst';
+  const userEmail = user?.email || 'research@fidelity.com';
+  const userInitial = userName.charAt(0).toUpperCase() || 'F';
+
+  /* sessions */
   const [sessions, setSessions] = useState<Session[]>(() => {
-    const saved = localStorage.getItem('fidelity_research_sessions');
+    const saved = localStorage.getItem('alfa_sessions');
     if (saved) return JSON.parse(saved);
-    return [
-      {
-        id: 'default',
-        title: 'Fidelity Research Bot',
-        messages: [
-          { 
-            id: '1', 
-            type: 'assistant', 
-            content: 'Welcome to Fidelity RAG. I am ready to analyze your prospectuses and provide deep insights. How can I assist you today?',
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          }
-        ]
-      }
-    ];
+    return [{ id: 'default', title: 'New conversation', messages: [] }];
   });
-  
-  const [activeSessionId, setActiveSessionId] = useState(() => {
-    return localStorage.getItem('fidelity_active_session') || 'default';
-  });
+  const [activeId, setActiveId] = useState(() => localStorage.getItem('alfa_active') || 'default');
+  const activeSession = sessions.find(s => s.id === activeId) || sessions[0];
 
-  const activeSession = sessions.find(s => s.id === activeSessionId) || sessions[0];
-
-  // UI State
+  /* ui */
   const [query, setQuery] = useState('');
   const [querying, setQuerying] = useState(false);
   const [useWebSearch, setUseWebSearch] = useState(false);
   const [deepThink, setDeepThink] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  
-  // Upload State
+  const [showUpload, setShowUpload] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [fundName, setFundName] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [showUploadModal, setShowUploadModal] = useState(false);
-
-  const chatEndRef = useRef<HTMLDivElement>(null);
-  const typedMessagesRef = useRef<Set<string>>(new Set(['1'])); // mark default message as typed
-  
-  // Voice Input State
-  const recognitionRef = useRef<any>(null);
   const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const typedRef = useRef<Set<string>>(new Set(['__welcome__']));
 
-  // Persistence Effects
+  /* persist */
+  useEffect(() => { localStorage.setItem('alfa_sessions', JSON.stringify(sessions)); }, [sessions]);
+  useEffect(() => { localStorage.setItem('alfa_active', activeId); }, [activeId]);
+  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [activeSession.messages, querying]);
+
+  /* auto-resize textarea */
   useEffect(() => {
-    localStorage.setItem('fidelity_research_sessions', JSON.stringify(sessions));
-  }, [sessions]);
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 200) + 'px';
+  }, [query]);
 
-  useEffect(() => {
-    localStorage.setItem('fidelity_active_session', activeSessionId);
-  }, [activeSessionId]);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [activeSession.messages, querying]);
-
-  const createNewSession = () => {
-    const newId = Date.now().toString();
-    const newSession: Session = {
-      id: newId,
-      title: 'New Research',
-      messages: [
-        { 
-          id: '1', 
-          type: 'assistant', 
-          content: 'Hello! I\'m ready for a new research session. What should we analyze?',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]
-    };
-    setSessions([newSession, ...sessions]);
-    setActiveSessionId(newId);
-  };
-
-  const toggleVoice = () => {
-    if (isListening) {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-      setIsListening(false);
-      return;
-    }
-
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("Your browser does not support Voice Input. Try Chrome or Edge.");
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-
-    recognition.onstart = () => setIsListening(true);
-    
-    recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results)
-        .map((result: any) => result[0])
-        .map((result: any) => result.transcript)
-        .join('');
-      setQuery(transcript);
-    };
-
-    recognition.onerror = () => setIsListening(false);
-    recognition.onend = () => setIsListening(false);
-
-    recognitionRef.current = recognition;
-    recognition.start();
+  const newSession = () => {
+    const id = Date.now().toString();
+    setSessions(p => [{ id, title: 'New conversation', messages: [] }, ...p]);
+    setActiveId(id);
   };
 
   const deleteSession = (e: React.MouseEvent, id: string) => {
@@ -186,423 +104,372 @@ export default function ResearchWorkspace() {
     if (sessions.length === 1) return;
     const filtered = sessions.filter(s => s.id !== id);
     setSessions(filtered);
-    if (activeSessionId === id) {
-      setActiveSessionId(filtered[0].id);
-    }
+    if (activeId === id) setActiveId(filtered[0].id);
+  };
+
+  const toggleVoice = () => {
+    if (isListening) { recognitionRef.current?.stop(); setIsListening(false); return; }
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) return alert('Voice not supported in this browser.');
+    const r = new SR(); r.continuous = false; r.interimResults = true;
+    r.onstart = () => setIsListening(true);
+    r.onresult = (e: any) => setQuery(Array.from(e.results).map((x: any) => x[0].transcript).join(''));
+    r.onend = () => setIsListening(false);
+    recognitionRef.current = r; r.start();
   };
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !fundName) return;
-
     setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('fund_name', fundName);
-    formData.append('session_id', activeSessionId);
-
+    const form = new FormData();
+    form.append('file', file);
+    form.append('fund_name', fundName);
+    form.append('session_id', activeId);
     try {
-      const res = await fetch('http://localhost:8000/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const res = await fetch('http://localhost:8000/upload', { method: 'POST', body: form });
       if (!res.ok) throw new Error('Upload failed');
-      
-      // Update session title to the fund name if it's default
-      if (activeSession.title === 'New Research' || activeSession.title === 'Fidelity Research Bot') {
-        setSessions(prev => prev.map(s => s.id === activeSessionId ? { ...s, title: `${fundName} Analysis` } : s));
-      }
-
-      setShowUploadModal(false);
-      setFile(null);
-      setFundName('');
-      
-      // Add a system message about successful ingestion
-      const systemMsg: Message = {
-        id: Date.now().toString(),
-        type: 'assistant',
-        content: `Successfully ingested **${fundName}**. You can now ask questions specifically about this prospectus in this session.`,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setSessions(prev => prev.map(s => s.id === activeSessionId ? { ...s, messages: [...s.messages, systemMsg] } : s));
-
-    } catch (err) {
-      console.error(err);
-      alert("Failed to upload prospectus.");
-    } finally {
-      setUploading(false);
-    }
+      setSessions(p => p.map(s => s.id === activeId ? {
+        ...s,
+        title: `${fundName} Analysis`,
+        messages: [...s.messages, { id: Date.now().toString(), type: 'assistant', content: `✅ **${fundName}** ingested successfully. You can now ask questions about this document.`, time: t() }]
+      } : s));
+      setShowUpload(false); setFile(null); setFundName('');
+    } catch { alert('Upload failed. Is the backend running?'); }
+    finally { setUploading(false); }
   };
 
-  const handleQuery = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim() || querying) return;
-
-    const fullQuery = deepThink ? `[Deep Research Mode] ${query}` : query;
-
-    const userMessage: Message = { 
-      id: Date.now().toString(), 
-      type: 'user', 
-      content: query,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setSessions(prev => prev.map(s => {
-      if (s.id === activeSessionId) {
-        let newTitle = s.title;
-        if (s.title === 'New Research' || s.title === 'Fidelity Research Bot') {
-          newTitle = query.slice(0, 30) + (query.length > 30 ? '...' : '');
-        }
-        return { 
-          ...s, 
-          messages: [...s.messages, userMessage],
-          title: newTitle
-        };
-      }
-      return s;
-    }));
-    setQuery('');
-    setQuerying(true);
-
+  const send = async (overrideQuery?: string) => {
+    const q = (overrideQuery ?? query).trim();
+    if (!q || querying) return;
+    const userMsg: Message = { id: Date.now().toString(), type: 'user', content: q, time: t() };
+    setSessions(p => p.map(s => s.id === activeId ? {
+      ...s,
+      title: s.messages.length === 0 ? q.slice(0, 40) + (q.length > 40 ? '…' : '') : s.title,
+      messages: [...s.messages, userMsg]
+    } : s));
+    setQuery(''); setQuerying(true);
     try {
       const res = await fetch('http://localhost:8000/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          query: fullQuery, 
-          session_id: activeSessionId,
-          use_web_search: useWebSearch 
-        }),
+        body: JSON.stringify({ query: deepThink ? `[Deep Research] ${q}` : q, session_id: activeId, use_web_search: useWebSearch }),
       });
-      
-      if (!res.ok) throw new Error('Query failed');
-      
+      if (res.status === 404) {
+        throw new Error('404');
+      }
+      if (!res.ok) throw new Error();
       const data = await res.json();
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: data.answer,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        citations: data.citations
-      };
-      
-      setSessions(prev => prev.map(s => {
-        if (s.id === activeSessionId) {
-          return { ...s, messages: [...s.messages, assistantMessage] };
-        }
-        return s;
+      /* normalise citations from new backend format */
+      const internal: Citation[] = (data.citations || []).map((c: any) => ({
+        content: c.excerpt || c.content || '',
+        fund_name: c.source || c.fund_name || '',
+        page: c.page ? String(c.page) : c.page_number ? String(c.page_number) : '',
+        source: c.source || '',
+        excerpt: c.excerpt || '',
       }));
-    } catch (err) {
-      console.error(err);
-      const errorMessage: Message = { 
-        id: Date.now().toString(), 
-        type: 'assistant', 
-        content: 'Sorry, I encountered an error communicating with the backend. Please check your API keys.',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      const assistantMsg: Message = {
+        id: (Date.now() + 1).toString(), type: 'assistant', content: data.answer, time: t(),
+        citations: { internal, web: data.web_citations || [] },
+        traceInfo: { latency_ms: data.latency_ms, cost_usd: data.cost_usd, chunks_retrieved: data.chunks_retrieved, chunks_after_rerank: data.chunks_after_rerank },
       };
-      setSessions(prev => prev.map(s => {
-        if (s.id === activeSessionId) {
-          return { ...s, messages: [...s.messages, errorMessage] };
-        }
-        return s;
-      }));
-    } finally {
-      setQuerying(false);
-    }
+      setSessions(p => p.map(s => s.id === activeId ? { ...s, messages: [...s.messages, assistantMsg] } : s));
+    } catch (err: any) {
+      const is404 = err.message === '404';
+      setSessions(p => p.map(s => s.id === activeId ? {
+        ...s,
+        messages: [...s.messages, { id: Date.now().toString(), type: 'assistant', content: is404 ? '⚠️ No documents found in this session. Please upload a PDF document first using the paperclip icon or Upload Document button.' : '⚠️ Could not reach the backend. Please check the server is running on port 8000.', time: t() }]
+      } : s));
+    } finally { setQuerying(false); }
   };
 
-  return (
-    <div className="flex h-screen bg-[#0c0c0c] text-white overflow-hidden selection:bg-brand/30 font-sans relative">
-      
-      {/* Floating Menu Toggle (visible when sidebar is closed) */}
-      {!sidebarOpen && (
-        <button 
-          onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 left-4 z-30 p-2.5 bg-[#0a0b0d]/90 backdrop-blur-xl border border-white/10 rounded-xl text-white/50 hover:text-white transition-all shadow-xl"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-      )}
-      
-      {/* Background Video */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-100" src="/vecteezy_ai-generated-clear-cloudy-sky-seamless-looping-animated-video_35594972.mp4" />
-      </div>
-      <div className="absolute inset-0 z-0 pointer-events-none bg-black/0" />
+  const isEmpty = activeSession.messages.length === 0;
 
-      {/* Left Sidebar */}
-      <motion.div 
-        animate={{ width: sidebarOpen ? 280 : 0, opacity: sidebarOpen ? 1 : 0 }}
-        className="h-screen bg-[#0a0b0d]/95 backdrop-blur-3xl border-r border-white/[0.07] flex flex-col z-20 overflow-hidden shrink-0"
-      >
-        <div className="p-4 border-b border-white/10 flex items-center justify-between gap-2">
-          <button 
-            onClick={() => setSidebarOpen(false)}
-            className="p-2 hover:bg-white/5 rounded-lg text-white/30 transition-colors"
+  return (
+    <div className="flex h-screen bg-[#1e1e1e] overflow-hidden font-sans">
+      {/* ── Sidebar ── */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.aside
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 280, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="h-screen flex flex-col bg-[#1e1e1e] border-r border-white/5 overflow-hidden shrink-0 text-white"
           >
+            {/* Logo */}
+            <div className="p-5 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-[#050505] shadow-[0_0_10px_rgba(255,255,255,0.15)] border border-white/10 overflow-hidden flex items-center justify-center">
+                <img src="/logo.png" alt="Logo" className="w-full h-full object-cover scale-[1.1]" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+              </div>
+              <span className="font-bold text-lg tracking-tight text-white">Fidelity RAG</span>
+            </div>
+
+            <div className="px-4 mb-6 mt-2">
+              <button onClick={newSession} className="w-full py-3 bg-[#3ea8ff] hover:bg-[#2c91e0] transition-colors rounded-xl font-medium text-white flex items-center justify-center gap-2 shadow-lg shadow-[#3ea8ff]/20">
+                <Plus className="w-5 h-5" /> New Chat
+              </button>
+            </div>
+
+            {/* Sessions */}
+            <div className="flex-1 overflow-y-auto px-4 space-y-1">
+              <p className="py-2 text-[11px] font-bold text-white/40 uppercase tracking-widest mb-1 mt-2">Today</p>
+              {sessions.map(s => (
+                <div key={s.id} className="group relative">
+                  <button
+                    onClick={() => setActiveId(s.id)}
+                    className={`w-full text-left px-3 py-3 rounded-xl text-sm font-medium transition-all pr-8 truncate ${activeId === s.id ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white/90'}`}
+                  >
+                    <MessageSquare className="w-4 h-4 inline mr-3 opacity-60" />
+                    {s.title}
+                  </button>
+                  <button
+                    onClick={e => deleteSession(e, s.id)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 opacity-0 group-hover:opacity-100 text-white/40 hover:text-red-400 transition-all rounded-lg hover:bg-white/5"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* User Profile */}
+            <div className="p-4 border-t border-white/5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center relative shrink-0">
+                <span className="text-sm font-medium">{userInitial}</span>
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#1e1e1e] rounded-full"></div>
+              </div>
+              <div className="flex flex-col truncate">
+                <span className="text-sm font-semibold text-white truncate">{userName}</span>
+                <span className="text-xs text-white/50 truncate">{userEmail}</span>
+              </div>
+            </div>
+          </motion.aside>
+        )}
+      </AnimatePresence>
+
+      <div className="flex-1 flex flex-col overflow-hidden relative bg-white rounded-l-[30px] shadow-[-10px_0_30px_rgba(0,0,0,0.5)] m-2 ml-0">
+
+        {/* Top bar */}
+        <div className="h-16 flex items-center px-6 gap-4 border-b border-gray-100 shrink-0">
+          <button onClick={() => setSidebarOpen(o => !o)} className="p-2 rounded-xl text-gray-400 hover:text-gray-800 hover:bg-gray-100 transition-colors">
             <Menu className="w-5 h-5" />
           </button>
-          <button 
-            onClick={createNewSession}
-            className="flex-1 flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-sm font-medium text-white/80 shadow-sm group"
-          >
-            <div className="flex items-center gap-2">
-              <Plus className="w-4 h-4" />
-              New Research
-            </div>
-            <Sparkles className="w-4 h-4 text-brand" />
-          </button>
+          
+          <div className="flex items-center gap-3 ml-2">
+             <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center relative overflow-hidden shrink-0">
+                <span className="text-sm font-bold text-gray-500">{userInitial}</span>
+                <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+             </div>
+             <div className="flex flex-col hidden sm:flex max-w-[160px]">
+                <span className="text-sm font-bold text-gray-800 truncate">{userName}</span>
+                <span className="text-[11px] text-gray-500 truncate">{userEmail}</span>
+             </div>
+          </div>
+
+          <div className="ml-auto flex items-center gap-3">
+            <span className="text-[11px] text-gray-400 font-mono hidden sm:block">llama3-8b · hybrid RAG</span>
+            <NavMenu theme="light" />
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-2 py-4 space-y-1">
-          <div className="px-3 pb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">History</div>
-          {sessions.map(s => (
-            <div key={s.id} className="group relative">
-              <button 
-                onClick={() => setActiveSessionId(s.id)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all pr-10 ${activeSessionId === s.id ? 'bg-white/10 text-white font-semibold' : 'text-white/50 hover:bg-white/5'}`}
+        {/* Chat area */}
+        <div className="flex-1 overflow-y-auto bg-white">
+          {isEmpty ? (
+            /* Empty state matching image */
+            <div className="h-full flex flex-col items-center justify-center px-6">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-black mb-10 text-center leading-[1.1] max-w-2xl">
+                Please Upload the Documents<br />Before you begin
+              </h1>
+              <div 
+                onClick={() => setShowUpload(true)}
+                className="w-full max-w-xl h-56 border-2 border-dashed border-[#3ea8ff]/40 bg-[#f4fbff] rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-[#eaf6ff] hover:border-[#3ea8ff]/60 transition-all shadow-sm"
               >
-                <MessageSquare className={`w-4 h-4 ${activeSessionId === s.id ? 'text-brand' : 'text-white/20'}`} />
-                <span className="truncate">{s.title}</span>
-              </button>
-              <button 
-                onClick={(e) => deleteSession(e, s.id)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 opacity-0 group-hover:opacity-100 text-white/20 hover:text-red-400 transition-all rounded-md hover:bg-white/5"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+                <div className="w-14 h-14 rounded-full bg-[#3ea8ff] flex items-center justify-center mb-4 shadow-lg shadow-[#3ea8ff]/30">
+                  <Upload className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-center">
+                  <span className="text-gray-500 text-sm font-medium">Drag and Drop Or</span><br/>
+                  <span className="text-[#3ea8ff] text-sm font-bold mt-1 inline-block">Browse File</span> <span className="text-gray-500 text-sm font-medium">To Upload Document</span>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
+          ) : (
+            /* Messages */
+            <div className="max-w-4xl mx-auto w-full px-6 py-10 space-y-8">
+              <AnimatePresence mode="popLayout">
+                {activeSession.messages.map(msg => (
+                  <motion.div
+                    key={msg.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className={`flex gap-4 ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+                  >
+                    {/* Avatar */}
+                    {msg.type === 'assistant' ? (
+                      <div className="w-10 h-10 rounded-xl bg-[#050505] shadow-[0_0_10px_rgba(255,255,255,0.15)] border border-white/10 overflow-hidden flex items-center justify-center shrink-0 mt-1">
+                        <img src="/logo.png" alt="Logo" className="w-full h-full object-cover scale-[1.1]" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                      </div>
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0 mt-1 overflow-hidden">
+                         <span className="text-sm font-bold text-gray-500">{userInitial}</span>
+                      </div>
+                    )}
 
-        <div className="p-4 border-t border-white/10 bg-black/20 space-y-2">
-        </div>
-      </motion.div>
+                    <div className={`flex flex-col gap-2 max-w-[80%] ${msg.type === 'user' ? 'items-end' : 'items-start'}`}>
+                      {/* Bubble */}
+                      <div className={`px-5 py-4 rounded-2xl text-base leading-relaxed shadow-sm ${
+                        msg.type === 'user'
+                          ? 'bg-[#3ea8ff] text-white rounded-tr-sm'
+                          : 'bg-white border border-gray-200 text-gray-800 rounded-tl-sm'
+                      }`}>
+                        {msg.type === 'assistant' ? (
+                          <div className="prose prose-slate max-w-none prose-p:leading-[1.65] prose-p:text-[15px] prose-p:text-gray-800 prose-p:my-3 prose-li:my-1 prose-ul:my-3 prose-strong:font-semibold prose-strong:text-gray-900 marker:text-gray-300 prose-code:bg-blue-50 prose-code:text-[#3ea8ff] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-code:font-bold prose-code:before:content-none prose-code:after:content-none">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {msg.content.replace(/\(SOURCE:\s*(\d+)\)/gi, '`[$1]`')}
+                            </ReactMarkdown>
+                          </div>
+                        ) : (
+                          <p className="text-[15px] leading-[1.6]">{msg.content}</p>
+                        )}
+                      </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col relative z-10 overflow-hidden">
-        
-        {/* Chat History */}
-        <div className="flex-1 overflow-y-auto px-4 md:px-0 pt-8 pb-4 scroll-smooth">
-          <div className="max-w-3xl mx-auto space-y-8 relative">
-            <AnimatePresence mode="popLayout">
-              {activeSession.messages.map((msg) => (
-                <motion.div 
-                  key={msg.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex gap-4 ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  {msg.type === 'assistant' && (
-                    <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 relative overflow-hidden group shadow-lg">
-                      <div className="absolute inset-0 bg-gradient-to-br from-brand/20 to-transparent animate-pulse" />
-                      <Sparkles className="w-4 h-4 text-brand relative z-10" />
-                    </div>
-                  )}
-                  
-                  <div className="flex flex-col gap-1.5 max-w-[85%] md:max-w-[75%]">
-                    <div className={`rounded-2xl px-5 py-3.5 shadow-2xl border ${
-                      msg.type === 'user' 
-                        ? 'bg-[#1a1f2e] border-white/10 text-white rounded-tr-none shadow-black/40' 
-                        : 'bg-[#0e1218]/95 border-white/[0.08] text-white/90 rounded-tl-none backdrop-blur-xl'
-                    }`}>
-                      {msg.type === 'user' ? (
-                        <div className="text-[14px] leading-relaxed whitespace-pre-wrap">{msg.content}</div>
-                      ) : (
-                        <TypewriterMessage msgId={msg.id} content={msg.content} typedRef={typedMessagesRef} />
-                      )}
-                      
-                      {/* Citations */}
-                      {msg.citations && (
-                        <div className="mt-4 pt-4 border-t border-white/10 space-y-3">
-                          <div className="text-[9px] font-bold text-white/30 uppercase tracking-[0.2em] flex items-center gap-2">
-                            <FileText className="w-3 h-3" /> Source Verification
-                          </div>
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {msg.citations.internal?.map((cit, idx) => (
-                              <div key={`int-${idx}`} className="flex items-center gap-1.5 bg-[#1a1f2e]/80 border border-white/10 rounded-full px-3 py-1 hover:bg-[#252b3d] transition-colors cursor-default" title={cit.content}>
-                                <FileText className="w-3 h-3 text-brand/80" />
-                                <span className="text-[10px] font-bold text-white/60 uppercase">{cit.fund_name} • P{cit.page}</span>
-                              </div>
-                            ))}
-                            {msg.citations.web?.map((cit, idx) => (
-                              <a key={`web-${idx}`} href={cit.url} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 bg-brand/10 border border-brand/20 rounded-full px-3 py-1 hover:bg-brand/20 transition-colors" title={cit.content}>
-                                <Globe className="w-3 h-3 text-brand" />
-                                <span className="text-[10px] font-bold text-brand uppercase max-w-[150px] truncate">{cit.title}</span>
-                              </a>
-                            ))}
-                          </div>
+                      {/* Trace info */}
+                      {msg.traceInfo?.latency_ms && (
+                        <div className="flex gap-3 text-[11px] text-gray-400 font-mono px-2">
+                          <span>{Math.round(msg.traceInfo.latency_ms)}ms</span>
+                          {msg.traceInfo.cost_usd && <span>${msg.traceInfo.cost_usd.toFixed(5)}</span>}
+                          {msg.traceInfo.chunks_retrieved && <span>{msg.traceInfo.chunks_after_rerank}/{msg.traceInfo.chunks_retrieved} chunks</span>}
                         </div>
                       )}
-                    </div>
-                    <div className={`text-[9px] text-white/30 font-bold uppercase tracking-widest px-2 flex items-center gap-3 ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      {msg.time}
-                    </div>
-                  </div>
 
-                  {msg.type === 'user' && (
-                    <div className="w-10 h-10 rounded-full bg-[#1a1f2e] border border-white/10 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white/60">
-                      U
+                      {/* Citations */}
+                      {msg.citations && (msg.citations.internal.length > 0 || msg.citations.web.length > 0) && (
+                        <div className="space-y-2 w-full mt-2">
+                          {msg.citations.internal.length > 0 && (
+                            <div className="space-y-1.5">
+                              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">Sources</p>
+                              {msg.citations.internal.map((c, i) => (
+                                <div key={i} className="px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 text-sm text-gray-600 shadow-sm">
+                                  <span className="text-[#3ea8ff] font-bold mr-2">[{i + 1}]</span>
+                                  <span className="font-medium text-gray-800">{c.source || c.fund_name}</span>{c.page ? ` · p.${c.page}` : ''}
+                                  {(c.excerpt || c.content) && <p className="mt-2 text-gray-500 text-sm leading-relaxed line-clamp-3">{c.excerpt || c.content}</p>}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      <span className="text-[11px] text-gray-400 font-medium px-2 mt-1">{msg.time}</span>
                     </div>
-                  )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {/* Thinking indicator */}
+              {querying && (
+                <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex gap-4">
+                  <div className="w-10 h-10 rounded-full bg-[#3ea8ff]/10 flex items-center justify-center shrink-0">
+                    <Brain className="w-5 h-5 text-[#3ea8ff]" />
+                  </div>
+                  <div className="px-5 py-4 rounded-2xl rounded-tl-sm bg-gray-50 border border-gray-100 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[#3ea8ff] rounded-full animate-bounce [animation-delay:0ms]" />
+                    <span className="w-2 h-2 bg-[#3ea8ff] rounded-full animate-bounce [animation-delay:150ms]" />
+                    <span className="w-2 h-2 bg-[#3ea8ff] rounded-full animate-bounce [animation-delay:300ms]" />
+                  </div>
                 </motion.div>
-              ))}
-            </AnimatePresence>
-
-            {querying && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-4">
-                 <div className="w-10 h-10 rounded-full bg-[#0e1218]/95 border border-white/10 flex items-center justify-center flex-shrink-0">
-                    <Loader2 className="w-4 h-4 text-brand animate-spin" />
-                  </div>
-                  <div className="bg-[#0e1218]/95 border border-white/[0.08] rounded-2xl px-5 py-3.5 text-sm text-white/60 flex items-center gap-3 shadow-2xl backdrop-blur-xl">
-                    <Sparkles className="w-4 h-4 text-brand animate-pulse" />
-                    Deep Research in progress...
-                  </div>
-              </motion.div>
-            )}
-            <div ref={chatEndRef} />
-          </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+          )}
         </div>
 
-        {/* Input Area */}
-        <div className="px-6 pb-6 pt-2 md:px-10 md:pb-10 md:pt-4 z-10">
-          <div className="max-w-3xl mx-auto">
-            <form 
-              onSubmit={handleQuery} 
-              className="relative bg-[#0e1218]/95 backdrop-blur-3xl border border-white/[0.08] rounded-[24px] shadow-2xl p-2 transition-all focus-within:border-brand/30 shadow-black/60"
-            >
-              <textarea 
-                rows={1}
+        {/* ── Input Bar ── */}
+        <div className="shrink-0 px-6 pb-6 pt-4 bg-white z-10">
+          <div className="max-w-4xl mx-auto">
+            {/* Input box */}
+            <div className="relative flex items-end gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-3 focus-within:border-[#3ea8ff]/50 focus-within:ring-4 focus-within:ring-[#3ea8ff]/10 transition-all shadow-sm">
+              <button onClick={() => setShowUpload(true)} className="p-2 text-gray-400 hover:text-[#3ea8ff] hover:bg-[#3ea8ff]/10 rounded-xl transition-colors mb-0.5 shrink-0">
+                <Paperclip className="w-5 h-5" />
+              </button>
+              <textarea
+                ref={textareaRef}
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleQuery(e as any);
-                  }
-                }}
-                placeholder="Analyze fund performance, fees, or strategy..."
-                className="w-full bg-transparent border-none rounded-none pl-6 pr-12 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:ring-0 resize-none min-h-[48px] max-h-32"
+                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}
+                placeholder="Ask a question about the document..."
+                rows={1}
+                className="flex-1 bg-transparent text-gray-800 placeholder-gray-400 resize-none outline-none text-[15px] leading-relaxed max-h-48 overflow-y-auto py-1.5"
               />
-              <div className="flex items-center justify-between px-3 pb-2 pt-1 border-t border-white/5 mt-1">
-                <div className="flex items-center gap-1">
-                  <button 
-                    type="button" 
-                    onClick={() => setShowUploadModal(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors text-[10px] font-bold text-white/30 uppercase tracking-wider"
-                  >
-                    <Paperclip className="w-3.5 h-3.5" />
-                    Attach
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => setDeepThink(!deepThink)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all text-[10px] font-bold uppercase tracking-wider ${deepThink ? 'bg-brand/20 text-brand' : 'hover:bg-white/5 text-white/30'}`}
-                  >
-                    <Brain className="w-3.5 h-3.5" />
-                    Deep Think
-                  </button>
-                  <label className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all text-[10px] font-bold uppercase tracking-wider cursor-pointer ${useWebSearch ? 'bg-brand/20 text-brand' : 'hover:bg-white/5 text-white/30'}`}>
-                    <Globe className="w-3.5 h-3.5" />
-                    Live Search
-                    <input 
-                      type="checkbox" 
-                      checked={useWebSearch} 
-                      onChange={e => setUseWebSearch(e.target.checked)}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button 
-                    type="button" 
-                    onClick={toggleVoice}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors text-[10px] font-bold uppercase tracking-wider ${isListening ? 'bg-red-500/20 text-red-400 animate-pulse' : 'hover:bg-white/5 text-white/30'}`}
-                  >
-                    <Mic className="w-3.5 h-3.5" />
-                    {isListening ? 'Listening...' : 'Voice'}
-                  </button>
-                  <button 
-                    type="submit"
-                    disabled={!query.trim() || querying}
-                    className="flex items-center gap-2 px-5 py-2 rounded-full bg-brand text-white text-xs font-bold hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-20 shadow-[0_0_15px_rgba(61,129,227,0.3)]"
-                  >
-                    Analyze
-                    <Send className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Upload Modal */}
-      <AnimatePresence>
-        {showUploadModal && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-xl"
-          >
-            <motion.div 
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              className="w-full max-w-md bg-[#0e1014] rounded-3xl shadow-2xl p-8 border border-white/10 relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-brand/5 to-transparent pointer-events-none" />
-              <div className="flex items-center justify-between mb-8 relative z-10">
-                <h2 className="text-xl font-bold text-white tracking-tight">Ingest Prospectus</h2>
-                <button onClick={() => setShowUploadModal(false)} className="text-white/20 hover:text-white transition-colors">
-                  <X className="w-6 h-6" />
+              <div className="flex items-center mb-0.5 shrink-0">
+                <button
+                  onClick={() => send()}
+                  disabled={!query.trim() || querying}
+                  className="w-10 h-10 rounded-full bg-[#3ea8ff] text-white flex items-center justify-center disabled:opacity-50 hover:bg-[#2c91e0] transition-colors shadow-md shadow-[#3ea8ff]/20"
+                >
+                  {querying ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 ml-0.5" />}
                 </button>
               </div>
-              
-              <form onSubmit={handleUpload} className="space-y-6 relative z-10">
+            </div>
+            <div className="flex justify-between items-center mt-3 px-2">
+              <p className="text-[11px] text-gray-400 font-medium">Shift+Enter for new line · Enter to send</p>
+              <div className="flex gap-3">
+                 <button onClick={() => setUseWebSearch(o => !o)} className={`text-[11px] font-bold uppercase flex items-center gap-1 ${useWebSearch ? 'text-[#3ea8ff]' : 'text-gray-400 hover:text-gray-600'}`}>
+                   <Globe className="w-3 h-3" /> Web
+                 </button>
+                 <button onClick={() => setDeepThink(o => !o)} className={`text-[11px] font-bold uppercase flex items-center gap-1 ${deepThink ? 'text-[#3ea8ff]' : 'text-gray-400 hover:text-gray-600'}`}>
+                   <Brain className="w-3 h-3" /> Deep
+                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Upload Modal ── */}
+      <AnimatePresence>
+        {showUpload && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+            onClick={() => setShowUpload(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              onClick={e => e.stopPropagation()}
+              className="bg-[#171717] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-5">
+                <h2 className="text-base font-semibold text-white">Upload Document</h2>
+                <button onClick={() => setShowUpload(false)} className="text-white/40 hover:text-white transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <form onSubmit={handleUpload} className="space-y-4">
                 <div>
-                  <label className="text-[10px] font-bold text-white/30 uppercase tracking-widest mb-2 block">Fund Identifier</label>
-                  <input 
-                    type="text" 
-                    value={fundName}
-                    onChange={e => setFundName(e.target.value)}
-                    placeholder="e.g. Fidelity Contrafund (FCNTX)"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand/50 transition-all placeholder:text-white/10"
+                  <label className="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">Fund Name</label>
+                  <input
+                    value={fundName} onChange={e => setFundName(e.target.value)}
+                    placeholder="e.g. ALFA_GLOBAL_MACRO_01"
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/25 focus:outline-none focus:border-white/30 transition-colors"
                     required
                   />
                 </div>
-                
-                <div className="relative group">
-                  <input 
-                    type="file" 
-                    accept=".pdf"
-                    onChange={e => setFile(e.target.files?.[0] || null)}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-                    required
-                  />
-                  <div className="w-full bg-white/[0.02] border-2 border-white/5 border-dashed rounded-2xl p-8 text-center group-hover:border-brand/40 group-hover:bg-brand/5 transition-all flex flex-col items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-brand shadow-inner">
-                      <Upload className="w-6 h-6" />
-                    </div>
-                    <div className="text-sm font-medium text-white/40">
-                      {file ? <span className="text-brand">{file.name}</span> : 'Drop prospectus PDF here'}
-                    </div>
-                  </div>
+                <div>
+                  <label className="block text-xs font-medium text-white/50 mb-1.5 uppercase tracking-wider">PDF File</label>
+                  <label className="flex flex-col items-center justify-center h-28 border-2 border-dashed border-white/10 rounded-xl cursor-pointer hover:border-[#adc6ff]/40 transition-colors bg-white/[0.02]">
+                    <Upload className="w-5 h-5 text-white/30 mb-1" />
+                    <span className="text-xs text-white/40">{file ? file.name : 'Click to choose PDF'}</span>
+                    <input type="file" accept=".pdf" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} required />
+                  </label>
                 </div>
-
-                <div className="text-xs text-white/30 bg-white/5 p-3 rounded-lg border border-white/5 italic">
-                  Note: This document will be isolated to this specific session context only.
-                </div>
-
-                <button 
-                  type="submit" 
-                  disabled={uploading}
-                  className="w-full bg-white text-black font-bold rounded-xl py-4 text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition-all shadow-xl disabled:opacity-50"
+                <button
+                  type="submit" disabled={uploading || !file || !fundName}
+                  className="w-full py-2.5 bg-[#adc6ff] text-[#0d0d0d] text-sm font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#c4d7ff] transition-all flex items-center justify-center gap-2"
                 >
-                  {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-                  {uploading ? 'Processing Research...' : 'Commit to Vector DB'}
+                  {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Ingesting…</> : <><Upload className="w-4 h-4" /> Ingest Document</>}
                 </button>
               </form>
             </motion.div>
@@ -612,3 +479,5 @@ export default function ResearchWorkspace() {
     </div>
   );
 }
+
+function t() { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
