@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # App & Database
 # ---------------------------------------------------------------------------
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://sachinsingh9971289015_db_user:6MHLjwEeDol1NqKl@cluster0.z2nik9c.mongodb.net/")
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
 mongo_client = AsyncIOMotorClient(MONGO_URI)
 db = mongo_client.fidelity_rag
 chunks_collection = db.chunks

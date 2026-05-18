@@ -1,5 +1,8 @@
 import os
 import datetime
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import bcrypt
@@ -10,7 +13,7 @@ router = APIRouter()
 SECRET_KEY = os.environ.get("JWT_SECRET", "super-secret-fidelity-key")
 ALGORITHM = "HS256"
 
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://sachinsingh9971289015_db_user:6MHLjwEeDol1NqKl@cluster0.z2nik9c.mongodb.net/")
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
 client = AsyncIOMotorClient(MONGO_URI)
 db = client.fidelity_rag
 users_collection = db.users
