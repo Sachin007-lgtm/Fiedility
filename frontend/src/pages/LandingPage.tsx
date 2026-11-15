@@ -106,9 +106,9 @@ export default function LandingPage() {
         </header>
 
         {/* ── Hero Section ── */}
-        <section className="pt-16 md:pt-24 pb-20 text-center flex flex-col items-center px-6">
+        <section className="pt-8 md:pt-14 pb-14 text-center flex flex-col items-center px-6">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand/40 dark:bg-brand/20 bg-white/80 backdrop-blur-md text-brand text-xs font-bold uppercase tracking-widest mb-8 shadow-md">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand/40 dark:bg-brand/20 bg-white/80 backdrop-blur-md text-brand text-xs font-bold uppercase tracking-widest mb-6 shadow-sm">
               <Sparkles className="w-3.5 h-3.5" />
               AI-Powered Fund Research · RAG Pipeline
             </div>
@@ -124,22 +124,18 @@ export default function LandingPage() {
               Understand any fund.
             </span>
             <br />
-            <span style={{
-              backgroundImage: 'linear-gradient(to right, #3D81E3 0%, #00d2ff 40%, #0284c7 70%, #3D81E3 100%)',
-              backgroundSize: '200% auto',
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              color: 'transparent',
-              WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 4px 18px rgba(61,129,227,0.4))'
-            }}>Instantly. Precisely.</span>
+            <span 
+              className="bg-clip-text text-transparent dark:bg-gradient-to-r dark:from-[#3D81E3] dark:via-[#38bdf8] dark:to-[#00d2ff] bg-gradient-to-r from-[#1d4ed8] via-[#2563eb] to-[#0284c7] drop-shadow-md"
+            >
+              Instantly. Precisely.
+            </span>
           </motion.h1>
 
           <motion.p 
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-8 dark:text-white text-slate-800 max-w-2xl text-lg leading-relaxed font-medium px-6 py-4 rounded-2xl dark:bg-black/40 bg-white/75 backdrop-blur-xl border dark:border-white/10 border-white/60 shadow-xl dark:[text-shadow:_0_1px_10px_rgba(0,0,0,0.85)] [text-shadow:_0_1px_6px_rgba(255,255,255,0.85)]"
+            className="mt-6 dark:text-white/95 text-slate-800 max-w-2xl text-base md:text-lg leading-relaxed font-medium px-6 py-3.5 rounded-2xl dark:bg-black/35 bg-white/45 backdrop-blur-md border dark:border-white/10 border-white/50 shadow-md dark:[text-shadow:_0_1px_8px_rgba(0,0,0,0.85)] [text-shadow:_0_1px_4px_rgba(255,255,255,0.7)]"
           >
             A production RAG pipeline over public fund prospectus PDFs enabling natural language Q&A grounded in
             cited source passages — with live DuckDuckGo web search augmentation.
@@ -149,7 +145,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }} 
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="mt-10 flex flex-col sm:flex-row items-center gap-4"
+            className="mt-7 flex flex-col sm:flex-row items-center gap-4"
           >
             <CTAButton label="Start Researching" to="/auth" />
             <a 
@@ -165,7 +161,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             transition={{ delay: 1 }}
-            className="mt-12 flex flex-wrap justify-center gap-2 max-w-4xl"
+            className="mt-8 flex flex-wrap justify-center gap-2 max-w-4xl"
           >
             {['FastAPI', 'Vite & React', 'ChromaDB', 'BM25 Retrieval', 'ms-marco Cross-Encoder', 'Groq Llama 3.1', 'DuckDuckGo Search', 'Observability & Tracing'].map(t => (
               <span 
