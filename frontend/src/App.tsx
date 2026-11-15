@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { MessageSquare } from 'lucide-react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import LandingPage from './pages/LandingPage';
 import ResearchWorkspace from './pages/ResearchWorkspace';
@@ -9,46 +8,10 @@ import SystemHealth from './pages/SystemHealth';
 import MonitoringDashboard from './pages/MonitoringDashboard';
 import Auth from './pages/Auth';
 
-function GlobalChatFAB() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  
-  if (location.pathname === '/workspace' || location.pathname === '/auth' || location.pathname === '/login' || location.pathname === '/signup') return null;
-
-  const handleClick = () => {
-    const token = localStorage.getItem('alfa_token');
-    if (token) {
-      navigate('/workspace');
-    } else {
-      navigate('/auth');
-    }
-  };
-
-  return (
-    <button
-      onClick={handleClick}
-      className="fixed bottom-6 right-6 w-13 h-13 rounded-2xl dark:bg-[#090b10] bg-white/90 backdrop-blur-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_0_25px_rgba(61,129,227,0.4)] border dark:border-[#3D81E3]/40 border-slate-200/80 flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-[100] p-2.5 group"
-      aria-label="Open Finsight Research Workspace"
-      title="Open Research Workspace"
-    >
-      <div className="relative w-full h-full flex items-center justify-center">
-        <img 
-          src="/logo.png" 
-          alt="Finsight" 
-          className="w-full h-full object-contain rounded-xl group-hover:scale-110 transition-transform" 
-          onError={(e) => { e.currentTarget.style.display = 'none'; }} 
-        />
-        <MessageSquare className="w-5 h-5 text-[#3D81E3] absolute inset-auto group-hover:scale-110 transition-transform hidden group-hover:block drop-shadow-sm" />
-      </div>
-    </button>
-  );
-}
-
 function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <GlobalChatFAB />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<Auth />} />
