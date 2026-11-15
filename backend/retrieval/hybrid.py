@@ -39,7 +39,8 @@ class HybridRetriever:
         bm25_weight: float = 0.4,
         vector_weight: float = 0.6,
     ):
-        self.embedder = SentenceTransformer(embed_model)
+        self.model_name = embed_model
+        self._embedder = None
         self.rrf_k = rrf_k
         self.bm25_weight = bm25_weight
         self.vector_weight = vector_weight
@@ -48,6 +49,22 @@ class HybridRetriever:
         self._corpus: dict[str, list[Chunk]] = defaultdict(list)
         self._bm25_index: dict[str, BM25Okapi] = {}
         self._embeddings: dict[str, np.ndarray] = {}
+
+    @property
+    def embedder(self):
+        if self._embedder is None:
+            try:
+                import torch
+                torch.set_num_threads(1)
+            except Exception:
+                pass
+            logger.info("Loading SentenceTransformer embedder: %s", self.model_name)
+            self._embedder = SentenceTransformer(self.model_name)
+            try:
+                self._embedder.eval()
+            except Exception:
+                pass
+        return self._embedder
 
     # ------------------------------------------------------------------
     # Indexing

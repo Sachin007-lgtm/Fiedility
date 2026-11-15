@@ -4,11 +4,21 @@ Integrates: Hybrid Retrieval (BM25 + Dense) → Cross-Encoder Rerank → Citatio
 """
 
 import os
+# Low-memory optimizations for cloud container environments (<512MB RAM)
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("VECLIB_MAXIMUM_THREADS", "1")
+os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ.setdefault("MALLOC_ARENA_MAX", "2")
+
 import uuid
 import time
 import logging
 import sqlite3
 import datetime
+import gc
 from typing import Optional, List
 from dotenv import load_dotenv
 
@@ -66,9 +76,6 @@ def init_docs_db():
     conn.commit()
     conn.close()
 
-init_docs_db()
-init_facts_db()
-
 # Safe Mongo initialization
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
 try:
@@ -93,18 +100,24 @@ from auth import router as auth_router
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
 # ---------------------------------------------------------------------------
-# Singletons
+# Singletons & Components (Lazy-loaded for low RAM footprint)
 # ---------------------------------------------------------------------------
 groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY", ""))
 retriever = HybridRetriever()
 reranker = CrossEncoderReranker(top_n=5)
 citation_enforcer = CitationEnforcer()
 
-# Seed default session with audited institutional benchmark facts and grounding chunks
-try:
-    seed_standard_financial_facts("default", retriever=retriever)
-except Exception as _seed_err:
-    logger.warning(f"Default facts seeding notice: {_seed_err}")
+
+@app.on_event("startup")
+async def on_startup():
+    """Initializes SQLite databases and seeds institutional benchmark facts on boot."""
+    init_docs_db()
+    init_facts_db()
+    try:
+        seed_standard_financial_facts("default", retriever=retriever)
+    except Exception as _seed_err:
+        logger.warning(f"Default facts seeding notice: {_seed_err}")
+    gc.collect()
 
 CHUNK_SIZE = 512        # characters per chunk
 CHUNK_OVERLAP = 64

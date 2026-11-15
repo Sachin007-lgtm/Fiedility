@@ -4,6 +4,7 @@ Uses a cross-encoder model to re-score candidate chunks against the query.
 Dramatically improves precision at the top of the result list.
 """
 
+import os
 import logging
 from dataclasses import dataclass
 from typing import Optional
@@ -45,25 +46,42 @@ class CrossEncoderReranker:
 
     def _load(self):
         if self._model is None:
+            enabled = os.environ.get("ENABLE_CROSS_ENCODER", "true").lower() in ("true", "1", "yes")
+            if not enabled:
+                logger.info("Cross-encoder disabled via ENABLE_CROSS_ENCODER=false (optimized for memory <512MB)")
+                return
             if not _CE_AVAILABLE:
-                raise RuntimeError("sentence-transformers required for reranking")
+                logger.warning("sentence-transformers not available; skipping cross-encoder")
+                return
+            try:
+                import torch
+                torch.set_num_threads(1)
+            except Exception:
+                pass
             logger.info("Loading cross-encoder: %s", self.model_name)
-            self._model = CrossEncoder(self.model_name, max_length=512)
+            try:
+                self._model = CrossEncoder(self.model_name, max_length=512)
+            except Exception as e:
+                logger.warning(f"Could not load cross-encoder ({e}); fallback to hybrid RRF scores")
+                self._model = None
 
     def rerank(self, query: str, chunks: list) -> list[RankedChunk]:
         """
         Rerank chunks using cross-encoder scores.
-        Falls back to retrieval scores if model unavailable.
+        Falls back to retrieval scores if model unavailable or memory restricted.
         """
         if not chunks:
             return []
 
         try:
             self._load()
-            pairs = [(query, c.text) for c in chunks]
-            scores = self._model.predict(pairs).tolist()
+            if self._model is not None:
+                pairs = [(query, c.text) for c in chunks]
+                scores = self._model.predict(pairs).tolist()
+            else:
+                scores = [c.score for c in chunks]
         except Exception as exc:
-            logger.error("Reranking failed (%s); falling back to retrieval scores", exc)
+            logger.warning("Reranking bypassed (%s); falling back to hybrid retrieval scores", exc)
             scores = [c.score for c in chunks]
 
         scored = sorted(zip(scores, chunks), key=lambda x: x[0], reverse=True)
