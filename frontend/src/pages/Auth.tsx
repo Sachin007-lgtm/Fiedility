@@ -67,35 +67,38 @@ export default function Auth() {
 
   return (
     <div className="relative min-h-screen overflow-hidden dark:bg-[#0c0c0c] bg-slate-50 dark:text-white text-slate-900 flex flex-col justify-center items-center p-4 selection:bg-[#3D81E3]/30 transition-colors duration-250">
-      {/* Background Video/Glow */}
+      {/* ── Background Video with High-Visibility Gradient Atmosphere ── */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <video
           autoPlay
           muted
           playsInline
           loop
-          className="w-full h-full object-cover pointer-events-none dark:opacity-40 opacity-20"
+          className="w-full h-full object-cover pointer-events-none dark:opacity-85 opacity-80 filter dark:brightness-[0.7] dark:contrast-[1.2] dark:saturate-[1.3] brightness-[1.0] contrast-[1.08] saturate-[1.15] transition-all duration-700"
           src="/vecteezy_ai-generated-clear-cloudy-sky-seamless-looping-animated-video_35594972.mp4"
         />
-        <div className="absolute inset-0 dark:bg-[#0c0c0c]/80 bg-slate-50/85 backdrop-blur-3xl transition-colors duration-250" />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] dark:from-transparent dark:via-black/25 dark:to-[#0c0c0e]/85 from-transparent via-white/10 to-slate-100/70 transition-colors duration-300" />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b dark:from-[#0c0c0e]/60 dark:via-transparent dark:to-[#0c0c0e]/90 from-white/60 via-transparent to-slate-50/90 transition-colors duration-300" />
       </div>
 
-      {/* Top Bar with Back and Theme Toggle */}
+      {/* Top Bar with Frosted Glass Pills */}
       <div className="fixed top-6 left-6 right-6 flex items-center justify-between z-20 max-w-4xl mx-auto pointer-events-auto">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-sm dark:text-white/60 text-slate-600 hover:text-black dark:hover:text-white transition-colors px-3 py-1.5 rounded-full dark:bg-white/5 bg-white/80 border dark:border-white/10 border-slate-200 shadow-sm"
+          className="inline-flex items-center gap-2 text-sm dark:text-white text-slate-800 font-semibold px-4 py-2 rounded-full dark:bg-black/40 bg-white/80 backdrop-blur-xl border dark:border-white/15 border-white/60 shadow-lg hover:scale-105 transition-all"
         >
           <ChevronLeft className="w-4 h-4" /> Back to home
         </Link>
-        <ThemeToggle showLabel className="shadow-sm" />
+        <div className="p-1 rounded-full dark:bg-black/40 bg-white/80 backdrop-blur-xl border dark:border-white/15 border-white/60 shadow-lg">
+          <ThemeToggle showLabel className="border-0 bg-transparent shadow-none" />
+        </div>
       </div>
 
       <div className="relative z-10 w-full max-w-[420px] mt-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="liquid-glass rounded-3xl border dark:border-white/10 border-slate-200 shadow-2xl relative overflow-hidden group dark:bg-[#111318]/90 bg-white/95 backdrop-blur-2xl"
+          className="liquid-glass rounded-3xl border dark:border-white/15 border-white/70 shadow-2xl relative overflow-hidden group dark:bg-[#111318]/90 bg-white/95 backdrop-blur-2xl"
         >
           {/* Top highlight glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-[#3D81E3] to-transparent opacity-60" />
@@ -111,10 +114,10 @@ export default function Auth() {
                 />
               </div>
               <h2 className="text-xl font-bold dark:text-white text-slate-900 tracking-tight">Finsight</h2>
-              <p className="text-xs dark:text-white/50 text-slate-500 mt-0.5">Institutional Financial Intelligence</p>
+              <p className="text-xs dark:text-white/60 text-slate-500 mt-0.5 font-medium">Institutional Financial Intelligence</p>
 
               {error && (
-                <div className="w-full mt-3 text-red-500 text-xs text-center font-medium bg-red-500/10 px-3 py-2 rounded-xl border border-red-500/20">
+                <div className="w-full mt-3 text-red-500 text-xs text-center font-semibold bg-red-500/10 px-3 py-2 rounded-xl border border-red-500/20">
                   {error}
                 </div>
               )}
@@ -131,12 +134,12 @@ export default function Auth() {
                 <div className="w-1/2 px-1 flex flex-col">
                   <div className="text-center mb-4">
                     <h1 className="text-base font-bold dark:text-white text-slate-900 mb-0.5">Welcome back</h1>
-                    <p className="dark:text-white/40 text-slate-500 text-xs">Enter your analyst credentials.</p>
+                    <p className="dark:text-white/50 text-slate-500 text-xs">Enter your analyst credentials.</p>
                   </div>
 
                   <form onSubmit={handleLoginSubmit} className="space-y-3 flex-1">
                     <div>
-                      <label className="block text-[10px] font-semibold dark:text-white/60 text-slate-600 uppercase tracking-wider mb-1.5">
+                      <label className="block text-[10px] font-bold dark:text-white/70 text-slate-700 uppercase tracking-wider mb-1.5">
                         Email Address
                       </label>
                       <input
@@ -144,13 +147,13 @@ export default function Auth() {
                         required
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        className="w-full dark:bg-white/5 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/20 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
+                        className="w-full dark:bg-black/30 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/30 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
                         placeholder="analyst@firm.com"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-semibold dark:text-white/60 text-slate-600 uppercase tracking-wider mb-1.5">
+                      <label className="block text-[10px] font-bold dark:text-white/70 text-slate-700 uppercase tracking-wider mb-1.5">
                         Password
                       </label>
                       <input
@@ -158,7 +161,7 @@ export default function Auth() {
                         required
                         value={password}
                         onChange={e => setPassword(e.target.value)}
-                        className="w-full dark:bg-white/5 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/20 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
+                        className="w-full dark:bg-black/30 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/30 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
                         placeholder="••••••••"
                       />
                     </div>
@@ -173,12 +176,12 @@ export default function Auth() {
                     </button>
                   </form>
 
-                  <div className="mt-5 text-center text-xs dark:text-white/50 text-slate-500">
+                  <div className="mt-5 text-center text-xs dark:text-white/60 text-slate-500">
                     Don't have an account?{' '}
                     <button
                       type="button"
                       onClick={() => setIsLogin(false)}
-                      className="text-[#3D81E3] hover:underline font-semibold ml-1"
+                      className="text-[#3D81E3] hover:underline font-bold ml-1"
                     >
                       Create account
                     </button>
@@ -189,12 +192,12 @@ export default function Auth() {
                 <div className="w-1/2 px-1 flex flex-col">
                   <div className="text-center mb-4">
                     <h1 className="text-base font-bold dark:text-white text-slate-900 mb-0.5">Create Analyst Account</h1>
-                    <p className="dark:text-white/40 text-slate-500 text-xs">Start your AI-powered fund research.</p>
+                    <p className="dark:text-white/50 text-slate-500 text-xs">Start your AI-powered fund research.</p>
                   </div>
 
                   <form onSubmit={handleSignupSubmit} className="space-y-3 flex-1">
                     <div>
-                      <label className="block text-[10px] font-semibold dark:text-white/60 text-slate-600 uppercase tracking-wider mb-1.5">
+                      <label className="block text-[10px] font-bold dark:text-white/70 text-slate-700 uppercase tracking-wider mb-1.5">
                         Full Name
                       </label>
                       <input
@@ -202,13 +205,13 @@ export default function Auth() {
                         required
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        className="w-full dark:bg-white/5 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/20 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
+                        className="w-full dark:bg-black/30 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/30 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
                         placeholder="Jane Doe"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-semibold dark:text-white/60 text-slate-600 uppercase tracking-wider mb-1.5">
+                      <label className="block text-[10px] font-bold dark:text-white/70 text-slate-700 uppercase tracking-wider mb-1.5">
                         Email Address
                       </label>
                       <input
@@ -216,13 +219,13 @@ export default function Auth() {
                         required
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                        className="w-full dark:bg-white/5 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/20 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
+                        className="w-full dark:bg-black/30 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/30 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
                         placeholder="analyst@firm.com"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-semibold dark:text-white/60 text-slate-600 uppercase tracking-wider mb-1.5">
+                      <label className="block text-[10px] font-bold dark:text-white/70 text-slate-700 uppercase tracking-wider mb-1.5">
                         Password
                       </label>
                       <input
@@ -230,7 +233,7 @@ export default function Auth() {
                         required
                         value={password}
                         onChange={e => setPassword(e.target.value)}
-                        className="w-full dark:bg-white/5 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/20 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
+                        className="w-full dark:bg-black/30 bg-slate-50 border dark:border-white/10 border-slate-300 rounded-xl px-4 py-2.5 text-sm dark:text-white text-slate-900 dark:placeholder:text-white/30 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3D81E3]/50 focus:border-transparent transition-all"
                         placeholder="••••••••"
                       />
                     </div>
@@ -245,12 +248,12 @@ export default function Auth() {
                     </button>
                   </form>
 
-                  <div className="mt-5 text-center text-xs dark:text-white/50 text-slate-500">
+                  <div className="mt-5 text-center text-xs dark:text-white/60 text-slate-500">
                     Already have an account?{' '}
                     <button
                       type="button"
                       onClick={() => setIsLogin(true)}
-                      className="text-[#3D81E3] hover:underline font-semibold ml-1"
+                      className="text-[#3D81E3] hover:underline font-bold ml-1"
                     >
                       Sign in
                     </button>
@@ -261,11 +264,11 @@ export default function Auth() {
 
             {/* Quick Guest Demo Access */}
             <div className="mt-6 pt-5 border-t dark:border-white/10 border-slate-200 text-center">
-              <p className="text-[11px] dark:text-white/40 text-slate-500 mb-2.5">Exploring or demoing the platform?</p>
+              <p className="text-[11px] dark:text-white/50 text-slate-500 mb-2.5 font-medium">Exploring or demoing the platform?</p>
               <button
                 type="button"
                 onClick={handleGuestAccess}
-                className="w-full py-3 px-4 rounded-xl dark:bg-white/[0.04] dark:border-white/15 dark:text-white bg-slate-100 border border-slate-300 text-slate-800 hover:border-[#3D81E3] hover:bg-[#3D81E3]/10 text-xs font-semibold flex items-center justify-center gap-2 transition-all group shadow-sm active:scale-[0.99]"
+                className="w-full py-3 px-4 rounded-xl dark:bg-white/[0.06] dark:border-white/15 dark:text-white bg-slate-100 border border-slate-300 text-slate-800 hover:border-[#3D81E3] hover:bg-[#3D81E3]/10 text-xs font-semibold flex items-center justify-center gap-2 transition-all group shadow-sm active:scale-[0.99]"
               >
                 <Sparkles className="w-4 h-4 text-[#3D81E3] dark:text-[#00d2ff] group-hover:scale-110 transition-transform" />
                 Continue as Guest Analyst (Instant Access)
