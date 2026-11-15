@@ -133,3 +133,4 @@ def extract_page_with_tables(page: fitz.Page) -> Tuple[str, List[Dict[str, Any]]
         final_text = raw_text
 
     return final_text, extracted_tables
+

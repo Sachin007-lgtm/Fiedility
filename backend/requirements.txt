@@ -14,6 +14,7 @@ numpy==1.26.4
 
 # LLM
 groq==0.9.0
+duckduckgo_search==8.1.1
 
 # Auth & DB
 bcrypt==4.1.3
