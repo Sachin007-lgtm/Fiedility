@@ -4,9 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { 
   MessageSquare, 
   FolderArchive, 
-  Cpu, 
   Activity, 
-  ShieldCheck, 
   Home, 
   Menu, 
   X, 
@@ -26,9 +24,7 @@ interface LayoutProps {
 const NAV_ITEMS = [
   { label: 'Research', icon: MessageSquare, path: '/workspace', desc: 'AI Fund Chat' },
   { label: 'Library', icon: FolderArchive, path: '/library', desc: 'Document Catalog' },
-  { label: 'Pipeline', icon: Cpu, path: '/ingestion', desc: 'Chunking & Ingestion' },
-  { label: 'Monitoring', icon: Activity, path: '/monitoring', desc: 'RAG Observability' },
-  { label: 'System Health', icon: ShieldCheck, path: '/health', desc: 'Cluster Infrastructure' },
+  { label: 'Monitoring', icon: Activity, path: '/monitoring', desc: 'RAG Observability & Citations' },
 ];
 
 export function NavMenu({ theme = 'dark' }: { theme?: 'dark' | 'light' }) {
