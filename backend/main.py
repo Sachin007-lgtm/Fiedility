@@ -26,6 +26,14 @@ from retrieval.reranker import CrossEncoderReranker
 from retrieval.citations import CitationEnforcer
 from monitoring.tracer import Tracer, metrics_store
 from motor.motor_asyncio import AsyncIOMotorClient
+from finance_engine import (
+    init_facts_db,
+    insert_fact,
+    seed_standard_financial_facts,
+    detect_and_execute_financial_math,
+    extract_and_store_facts_from_page
+)
+from parsers import extract_page_with_tables
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -59,6 +67,7 @@ def init_docs_db():
     conn.close()
 
 init_docs_db()
+init_facts_db()
 
 # Safe Mongo initialization
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017")
@@ -90,6 +99,12 @@ groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY", ""))
 retriever = HybridRetriever()
 reranker = CrossEncoderReranker(top_n=5)
 citation_enforcer = CitationEnforcer()
+
+# Seed default session with audited institutional benchmark facts and grounding chunks
+try:
+    seed_standard_financial_facts("default", retriever=retriever)
+except Exception as _seed_err:
+    logger.warning(f"Default facts seeding notice: {_seed_err}")
 
 CHUNK_SIZE = 512        # characters per chunk
 CHUNK_OVERLAP = 64
@@ -141,6 +156,7 @@ class QueryResponse(BaseModel):
     cost_usd: float
     chunks_retrieved: int
     chunks_after_rerank: int
+    financial_computation: Optional[dict] = None
 
 
 # ---------------------------------------------------------------------------
@@ -287,11 +303,23 @@ async def load_sample_document(session_id: Optional[str] = Form(None)):
     fund_name = "Fidelity Contrafund (FCNTX)"
     all_chunks: list[Chunk] = []
 
+    seed_standard_financial_facts(session_id, retriever=retriever)
+
     for page_num in range(min(page_count, 30)):  # Ingest first 30 pages for rapid indexing
         page = doc[page_num]
-        text = page.get_text()
+        text, tables = extract_page_with_tables(page)
         if text.strip():
             all_chunks.extend(chunk_text(text, source="11147_p.pdf", fund_name=fund_name, page=page_num + 1))
+            try:
+                extract_and_store_facts_from_page(
+                    text=text,
+                    page_number=page_num + 1,
+                    company=fund_name,
+                    session_id=session_id,
+                    document_name="11147_p.pdf"
+                )
+            except Exception as _fe_err:
+                logger.debug(f"Fact extraction skipped for page {page_num+1}: {_fe_err}")
     doc.close()
 
     doc_id = f"sample_{session_id}"
@@ -337,10 +365,22 @@ async def upload_pdf(
 
     all_chunks: list[Chunk] = []
     page_count = len(doc)
+    seed_standard_financial_facts(session_id, retriever=retriever)
+
     for page_num, page in enumerate(doc):
-        text = page.get_text()
+        text, tables = extract_page_with_tables(page)
         if text.strip():
             all_chunks.extend(chunk_text(text, source=file.filename, fund_name=resolved_fund, page=page_num + 1))
+            try:
+                extract_and_store_facts_from_page(
+                    text=text,
+                    page_number=page_num + 1,
+                    company=resolved_fund,
+                    session_id=session_id,
+                    document_name=file.filename
+                )
+            except Exception as _fe_err:
+                logger.debug(f"Fact extraction skipped for page {page_num+1}: {_fe_err}")
 
     doc.close()
 
@@ -378,6 +418,13 @@ async def upload_pdf(
 async def query(req: QueryRequest):
     """Full RAG pipeline with hybrid retrieval, reranking, citation enforcement, DuckDuckGo search, and tracing."""
     tracer = Tracer(session_id=req.session_id, query=req.query)
+
+    # Deterministic Python financial math execution (growth, margin, ratios)
+    math_result = None
+    try:
+        math_result = detect_and_execute_financial_math(req.query, req.session_id)
+    except Exception as _m_err:
+        logger.warning(f"Math engine check skipped: {_m_err}")
 
     try:
         # Check if chunks are in memory, or try restoring from mongo if available
@@ -444,6 +491,7 @@ QUESTION:
                 cost_usd=round(trace.cost_usd, 6),
                 chunks_retrieved=0,
                 chunks_after_rerank=0,
+                financial_computation=math_result,
             )
 
         bm25_top = raw_chunks[0].bm25_rank if raw_chunks else 0
@@ -474,6 +522,11 @@ QUESTION:
         if web_results:
             web_sec = "\n\n=== LIVE WEB SOURCES ===\n" + "\n\n".join([f"[WEB:{i+1}] {w['title']} ({w['url']}):\n{w['content']}" for i, w in enumerate(web_results)])
             prompt = prompt.replace("=== QUESTION ===", web_sec + "\n\n=== QUESTION ===")
+
+        # Inject verified Python math calculation if detected
+        if math_result:
+            math_sec = f"\n\n=== VERIFIED INSTITUTIONAL FINANCIAL CALCULATION (DETERMINISTIC PYTHON) ===\n{math_result['verified_statement']}\nNOTE: Incorporate this exact audited computation and formula into your response.\n\n"
+            prompt = prompt.replace("=== QUESTION ===", math_sec + "=== QUESTION ===")
 
         # Step 5: LLM Generation
         t2 = time.perf_counter()
@@ -512,6 +565,7 @@ QUESTION:
             cost_usd=round(trace.cost_usd, 6),
             chunks_retrieved=len(raw_chunks),
             chunks_after_rerank=len(ranked_chunks),
+            financial_computation=math_result,
         )
 
     except HTTPException:

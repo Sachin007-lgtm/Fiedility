@@ -1,0 +1,1764 @@
+[
+  {
+    "id": "GOLDEN-001",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "What is the total expense ratio of Fidelity Contrafund?",
+    "expected_answer": "0.86%",
+    "ground_truth_keywords": [
+      "0.86"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-002",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "What is the advisory and management fee for Fidelity Contrafund?",
+    "expected_answer": "0.44%",
+    "ground_truth_keywords": [
+      "0.44"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-003",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "What was the expense ratio of Fidelity Contrafund in FY2024?",
+    "expected_answer": "0.81%",
+    "ground_truth_keywords": [
+      "0.81"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-004",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "How does the management fee scale with assets under management in FCNTX?",
+    "expected_answer": "Graduated breakpoint schedule starting at 0.44%",
+    "ground_truth_keywords": [
+      "Graduated",
+      "breakpoint",
+      "schedule",
+      "starting",
+      "0.44"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-005",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "What are the 12b-1 distribution fees for Fidelity Contrafund Class A shares?",
+    "expected_answer": "None or subject to prospectus class rules",
+    "ground_truth_keywords": [
+      "None",
+      "subject",
+      "prospectus",
+      "class",
+      "rules"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-006",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "What is the portfolio turnover rate reported by Fidelity Contrafund?",
+    "expected_answer": "31%",
+    "ground_truth_keywords": [],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-007",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "What fee waivers or expense reimbursements are in place for the fund?",
+    "expected_answer": "Contractual expense caps as disclosed in fee table",
+    "ground_truth_keywords": [
+      "Contractual",
+      "expense",
+      "caps",
+      "disclosed",
+      "fee"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-008",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "Does Fidelity Contrafund charge front-end sales loads on retail class shares?",
+    "expected_answer": "No front-end sales loads on direct shares",
+    "ground_truth_keywords": [
+      "front-end",
+      "sales",
+      "loads",
+      "direct",
+      "shares"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-009",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "What are custodian and transfer agent fees as a percentage of net assets?",
+    "expected_answer": "Part of other operating expenses under 0.15%",
+    "ground_truth_keywords": [
+      "Part",
+      "other",
+      "operating",
+      "expenses",
+      "under"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-010",
+    "category": "Expense & Management Fees",
+    "company": "Fidelity Contrafund",
+    "question": "How often are management fees accrued and paid to the investment manager?",
+    "expected_answer": "Accrued daily and paid monthly",
+    "ground_truth_keywords": [
+      "Accrued",
+      "daily",
+      "and",
+      "paid",
+      "monthly"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-011",
+    "category": "Revenue & Growth Metrics",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Industries consolidated revenue in FY2024?",
+    "expected_answer": "\u20b91,000,122 Cr",
+    "ground_truth_keywords": [
+      "\u20b91000122"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-012",
+    "category": "Revenue & Growth Metrics",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Industries consolidated revenue in FY2025?",
+    "expected_answer": "\u20b91,200,450 Cr",
+    "ground_truth_keywords": [
+      "\u20b91200450"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-013",
+    "category": "Revenue & Growth Metrics",
+    "company": "Reliance Industries",
+    "question": "What was the year-over-year revenue growth of Reliance Industries between FY2024 and FY2025?",
+    "expected_answer": "20.03%",
+    "ground_truth_keywords": [
+      "20.03"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-014",
+    "category": "Revenue & Growth Metrics",
+    "company": "TCS",
+    "question": "What was the revenue from operations for TCS in FY2024?",
+    "expected_answer": "\u20b9240,893 Cr",
+    "ground_truth_keywords": [
+      "\u20b9240893"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-015",
+    "category": "Revenue & Growth Metrics",
+    "company": "TCS",
+    "question": "What was the revenue from operations for TCS in FY2025?",
+    "expected_answer": "\u20b9268,540 Cr",
+    "ground_truth_keywords": [
+      "\u20b9268540"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-016",
+    "category": "Revenue & Growth Metrics",
+    "company": "TCS",
+    "question": "What was the revenue growth percentage for TCS between FY2024 and FY2025?",
+    "expected_answer": "11.48%",
+    "ground_truth_keywords": [
+      "11.48"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-017",
+    "category": "Revenue & Growth Metrics",
+    "company": "Infosys",
+    "question": "What was Infosys revenue in FY2024?",
+    "expected_answer": "\u20b9153,670 Cr",
+    "ground_truth_keywords": [
+      "\u20b9153670"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-018",
+    "category": "Revenue & Growth Metrics",
+    "company": "Infosys",
+    "question": "What was Infosys revenue in FY2025?",
+    "expected_answer": "\u20b9168,400 Cr",
+    "ground_truth_keywords": [
+      "\u20b9168400"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-019",
+    "category": "Revenue & Growth Metrics",
+    "company": "Infosys",
+    "question": "What was the percentage revenue increase of Infosys in FY2025?",
+    "expected_answer": "9.59%",
+    "ground_truth_keywords": [
+      "9.59"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-020",
+    "category": "Revenue & Growth Metrics",
+    "company": "TCS vs Infosys",
+    "question": "Compare the revenue scale of TCS and Infosys for FY2025.",
+    "expected_answer": "TCS reported \u20b9268,540 Cr vs Infosys \u20b9168,400 Cr",
+    "ground_truth_keywords": [
+      "TCS",
+      "reported",
+      "\u20b9268540",
+      "Infosys",
+      "\u20b9168400"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-021",
+    "category": "Profitability & Margins",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Industries net profit (PAT) in FY2024?",
+    "expected_answer": "\u20b969,621 Cr",
+    "ground_truth_keywords": [
+      "\u20b969621"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-022",
+    "category": "Profitability & Margins",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Industries net profit in FY2025?",
+    "expected_answer": "\u20b979,020 Cr",
+    "ground_truth_keywords": [
+      "\u20b979020"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-023",
+    "category": "Profitability & Margins",
+    "company": "Reliance Industries",
+    "question": "What was the net profit growth of Reliance between FY2024 and FY2025?",
+    "expected_answer": "13.50%",
+    "ground_truth_keywords": [
+      "13.50"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-024",
+    "category": "Profitability & Margins",
+    "company": "TCS",
+    "question": "What was TCS operating EBITDA in FY2025?",
+    "expected_answer": "\u20b971,150 Cr",
+    "ground_truth_keywords": [
+      "\u20b971150"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-025",
+    "category": "Profitability & Margins",
+    "company": "TCS",
+    "question": "What was TCS consolidated net profit in FY2025?",
+    "expected_answer": "\u20b948,500 Cr",
+    "ground_truth_keywords": [
+      "\u20b948500"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-026",
+    "category": "Profitability & Margins",
+    "company": "TCS",
+    "question": "What was TCS net profit margin in FY2025?",
+    "expected_answer": "18.06%",
+    "ground_truth_keywords": [
+      "18.06"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-027",
+    "category": "Profitability & Margins",
+    "company": "Infosys",
+    "question": "What was Infosys net profit for FY2025?",
+    "expected_answer": "\u20b927,100 Cr",
+    "ground_truth_keywords": [
+      "\u20b927100"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-028",
+    "category": "Profitability & Margins",
+    "company": "Infosys",
+    "question": "What was Infosys net profit margin in FY2025?",
+    "expected_answer": "16.09%",
+    "ground_truth_keywords": [
+      "16.09"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-029",
+    "category": "Profitability & Margins",
+    "company": "TCS vs Infosys",
+    "question": "Compare the operating margins of TCS and Infosys in FY2025.",
+    "expected_answer": "TCS margin of 18.06% vs Infosys margin of 16.09%",
+    "ground_truth_keywords": [
+      "TCS",
+      "margin",
+      "18.06",
+      "Infosys",
+      "margin"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-030",
+    "category": "Profitability & Margins",
+    "company": "Reliance Industries",
+    "question": "What was the consolidated EBITDA of Reliance Industries in FY2025?",
+    "expected_answer": "\u20b9178,000 Cr",
+    "ground_truth_keywords": [
+      "\u20b9178000"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-031",
+    "category": "Leverage & Solvency",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Industries total debt in FY2025?",
+    "expected_answer": "\u20b9324,000 Cr",
+    "ground_truth_keywords": [
+      "\u20b9324000"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-032",
+    "category": "Leverage & Solvency",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Industries total equity in FY2025?",
+    "expected_answer": "\u20b9792,000 Cr",
+    "ground_truth_keywords": [
+      "\u20b9792000"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-033",
+    "category": "Leverage & Solvency",
+    "company": "Reliance Industries",
+    "question": "What is the debt-to-equity ratio of Reliance Industries in FY2025?",
+    "expected_answer": "0.4091x",
+    "ground_truth_keywords": [
+      "0.4091x"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-034",
+    "category": "Leverage & Solvency",
+    "company": "TCS",
+    "question": "Is TCS debt-free or does it hold net cash on its balance sheet?",
+    "expected_answer": "TCS operates on virtually zero long-term debt with positive net cash",
+    "ground_truth_keywords": [
+      "TCS",
+      "operates",
+      "virtually",
+      "zero",
+      "long-term"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-035",
+    "category": "Leverage & Solvency",
+    "company": "Infosys",
+    "question": "What is Infosys total debt on the consolidated balance sheet?",
+    "expected_answer": "Zero long-term debt",
+    "ground_truth_keywords": [
+      "Zero",
+      "long-term",
+      "debt"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-036",
+    "category": "Leverage & Solvency",
+    "company": "Reliance Industries",
+    "question": "How does Reliance Industries maintain its credit rating with domestic rating agencies?",
+    "expected_answer": "CRISIL AAA / Stable and CARE AAA",
+    "ground_truth_keywords": [
+      "CRISIL",
+      "AAA",
+      "Stable",
+      "and",
+      "CARE"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-037",
+    "category": "Leverage & Solvency",
+    "company": "Reliance Industries",
+    "question": "What is the interest coverage ratio of Reliance Industries?",
+    "expected_answer": "Above 8.5x operating profit to finance cost",
+    "ground_truth_keywords": [
+      "Above",
+      "8.5x",
+      "operating",
+      "profit",
+      "finance"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-038",
+    "category": "Leverage & Solvency",
+    "company": "Reliance Industries",
+    "question": "What is the net debt to EBITDA ratio target for Reliance Industries?",
+    "expected_answer": "Maintained below 1.0x",
+    "ground_truth_keywords": [
+      "Maintained",
+      "below",
+      "1.0x"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-039",
+    "category": "Leverage & Solvency",
+    "company": "TCS",
+    "question": "How much cash and cash equivalents did TCS report at FY2025 year end?",
+    "expected_answer": "Over \u20b940,000 Cr in cash, bank deposits, and liquid mutual funds",
+    "ground_truth_keywords": [
+      "Over",
+      "\u20b940000",
+      "cash",
+      "bank",
+      "deposits"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-040",
+    "category": "Leverage & Solvency",
+    "company": "Infosys",
+    "question": "What is Infosys cash flow from operating activities?",
+    "expected_answer": "Over 85% conversion of net profit to free cash flow",
+    "ground_truth_keywords": [
+      "Over",
+      "conversion",
+      "net",
+      "profit",
+      "free"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-041",
+    "category": "Principal Investment Risks",
+    "company": "Fidelity Contrafund",
+    "question": "What is the principal investment risk described in Fidelity Contrafund prospectus?",
+    "expected_answer": "Stock market volatility, growth style risk, and company-specific selection risk",
+    "ground_truth_keywords": [
+      "Stock",
+      "market",
+      "volatility",
+      "growth",
+      "style"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-042",
+    "category": "Principal Investment Risks",
+    "company": "Fidelity Contrafund",
+    "question": "How does foreign investment exposure affect fund risk in Contrafund?",
+    "expected_answer": "Exposes the fund to currency fluctuations and geopolitical instability",
+    "ground_truth_keywords": [
+      "Exposes",
+      "the",
+      "fund",
+      "currency",
+      "fluctuations"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-043",
+    "category": "Principal Investment Risks",
+    "company": "Fidelity Contrafund",
+    "question": "What is the management risk associated with Fidelity Contrafund?",
+    "expected_answer": "The risk that portfolio manager securities choices underperform the index",
+    "ground_truth_keywords": [
+      "The",
+      "risk",
+      "that",
+      "portfolio",
+      "manager"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-044",
+    "category": "Principal Investment Risks",
+    "company": "Reliance Industries",
+    "question": "What are the key geopolitical risks cited in Reliance annual report?",
+    "expected_answer": "Supply chain disruptions, crude oil price volatility, and regulatory export duties",
+    "ground_truth_keywords": [
+      "Supply",
+      "chain",
+      "disruptions",
+      "crude",
+      "oil"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-045",
+    "category": "Principal Investment Risks",
+    "company": "TCS",
+    "question": "What technology disruption risks does TCS mention regarding Generative AI?",
+    "expected_answer": "Need for workforce reskilling and potential compression of legacy maintenance revenue",
+    "ground_truth_keywords": [
+      "Need",
+      "for",
+      "workforce",
+      "reskilling",
+      "and"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-046",
+    "category": "Principal Investment Risks",
+    "company": "Infosys",
+    "question": "What foreign currency risks does Infosys disclose in its Form 20-F / SEBI filings?",
+    "expected_answer": "Fluctuations in USD, EUR, and GBP against INR impacting operating profitability",
+    "ground_truth_keywords": [
+      "Fluctuations",
+      "USD",
+      "EUR",
+      "and",
+      "GBP"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-047",
+    "category": "Principal Investment Risks",
+    "company": "Fidelity Contrafund",
+    "question": "What interest rate risks does Fidelity Contrafund encounter?",
+    "expected_answer": "Interest rate increases can compress equity valuation multiples",
+    "ground_truth_keywords": [
+      "Interest",
+      "rate",
+      "increases",
+      "can",
+      "compress"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-048",
+    "category": "Principal Investment Risks",
+    "company": "Fidelity Contrafund",
+    "question": "What liquidity risks are highlighted in fund share redemptions?",
+    "expected_answer": "Unfavorable market conditions could force liquidation at depressed asset prices",
+    "ground_truth_keywords": [
+      "Unfavorable",
+      "market",
+      "conditions",
+      "could",
+      "force"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-049",
+    "category": "Principal Investment Risks",
+    "company": "TCS",
+    "question": "What cyber security and data privacy risks are highlighted by TCS?",
+    "expected_answer": "Risk of operational interruptions, client confidential leaks, and compliance fines",
+    "ground_truth_keywords": [
+      "Risk",
+      "operational",
+      "interruptions",
+      "client",
+      "confidential"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-050",
+    "category": "Principal Investment Risks",
+    "company": "Reliance Industries",
+    "question": "What climate transition risks are cited by Reliance Industries?",
+    "expected_answer": "Transition of downstream refining assets to net-carbon zero by 2035",
+    "ground_truth_keywords": [
+      "Transition",
+      "downstream",
+      "refining",
+      "assets",
+      "net-carbon"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-051",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "Who is the portfolio manager of Fidelity Contrafund?",
+    "expected_answer": "Will Danoff",
+    "ground_truth_keywords": [
+      "Will",
+      "Danoff"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-052",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "Since what year has Will Danoff managed Fidelity Contrafund?",
+    "expected_answer": "1990",
+    "ground_truth_keywords": [
+      "1990"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-053",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "What is the primary investment objective of Fidelity Contrafund?",
+    "expected_answer": "Capital appreciation through undervalued growth companies",
+    "ground_truth_keywords": [
+      "Capital",
+      "appreciation",
+      "through",
+      "undervalued",
+      "growth"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-054",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "What benchmark index does Fidelity Contrafund compare its performance against?",
+    "expected_answer": "S&P 500 Index and Russell 1000 Growth Index",
+    "ground_truth_keywords": [
+      "S&P",
+      "500",
+      "Index",
+      "and",
+      "Russell"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-055",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "What is the fund strategy regarding investing in small and mid-cap companies?",
+    "expected_answer": "Primarily large-cap but may opportunistically invest in mid or small-cap stocks",
+    "ground_truth_keywords": [
+      "Primarily",
+      "large-cap",
+      "but",
+      "may",
+      "opportunistically"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-056",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "What percentage of assets is allowed in derivative contracts in Contrafund?",
+    "expected_answer": "Permitted primarily for hedging and cash flow management, typically under 5%",
+    "ground_truth_keywords": [
+      "Permitted",
+      "primarily",
+      "for",
+      "hedging",
+      "and"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-057",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "What is the historical active share of Fidelity Contrafund vs the benchmark?",
+    "expected_answer": "Consistently maintained high active share above 70%",
+    "ground_truth_keywords": [
+      "Consistently",
+      "maintained",
+      "high",
+      "active",
+      "share"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-058",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "Does Fidelity Contrafund invest in pre-IPO private companies?",
+    "expected_answer": "Yes, within SEC 15% illiquid asset guidelines",
+    "ground_truth_keywords": [
+      "Yes",
+      "within",
+      "SEC",
+      "illiquid",
+      "asset"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-059",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "How does the fund handle cash drag during market rallies?",
+    "expected_answer": "Maintains low cash allocation typically below 3%",
+    "ground_truth_keywords": [
+      "Maintains",
+      "low",
+      "cash",
+      "allocation",
+      "typically"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-060",
+    "category": "Portfolio Management & Strategy",
+    "company": "Fidelity Contrafund",
+    "question": "What voting rights policy does Fidelity follow regarding proxy votes?",
+    "expected_answer": "Governed by Fidelity Funds Proxy Voting Guidelines",
+    "ground_truth_keywords": [
+      "Governed",
+      "Fidelity",
+      "Funds",
+      "Proxy",
+      "Voting"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-061",
+    "category": "Segment Analysis & Operations",
+    "company": "Reliance Industries",
+    "question": "What are the key operating business segments of Reliance Industries?",
+    "expected_answer": "Oil to Chemicals (O2C), Oil & Gas Exploration, Retail, and Digital Services (Jio)",
+    "ground_truth_keywords": [
+      "Oil",
+      "Chemicals",
+      "(O2C)",
+      "Oil",
+      "Gas"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-062",
+    "category": "Segment Analysis & Operations",
+    "company": "Reliance Industries",
+    "question": "What is Reliance Retail market position in Indian retail sector?",
+    "expected_answer": "Largest retailer in India with over 18,000 stores",
+    "ground_truth_keywords": [
+      "Largest",
+      "retailer",
+      "India",
+      "with",
+      "over"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-063",
+    "category": "Segment Analysis & Operations",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Jio subscriber base in FY2025?",
+    "expected_answer": "Surpassed 480 million subscribers",
+    "ground_truth_keywords": [
+      "Surpassed",
+      "480",
+      "million",
+      "subscribers"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-064",
+    "category": "Segment Analysis & Operations",
+    "company": "TCS",
+    "question": "What is TCS largest geographic revenue contributor?",
+    "expected_answer": "North America accounting for approximately 50% of revenue",
+    "ground_truth_keywords": [
+      "North",
+      "America",
+      "accounting",
+      "for",
+      "approximately"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-065",
+    "category": "Segment Analysis & Operations",
+    "company": "TCS",
+    "question": "What is TCS largest industry vertical by revenue?",
+    "expected_answer": "Banking, Financial Services and Insurance (BFSI)",
+    "ground_truth_keywords": [
+      "Banking",
+      "Financial",
+      "Services",
+      "and",
+      "Insurance"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-066",
+    "category": "Segment Analysis & Operations",
+    "company": "Infosys",
+    "question": "What is Infosys largest business segment?",
+    "expected_answer": "Financial Services followed by Retail and Communications",
+    "ground_truth_keywords": [
+      "Financial",
+      "Services",
+      "followed",
+      "Retail",
+      "and"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-067",
+    "category": "Segment Analysis & Operations",
+    "company": "Infosys",
+    "question": "What was the total contract value (TCV) of large deals won by Infosys?",
+    "expected_answer": "Over  billion annually",
+    "ground_truth_keywords": [
+      "Over",
+      "billion",
+      "annually"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-068",
+    "category": "Segment Analysis & Operations",
+    "company": "TCS",
+    "question": "What was TCS total headcount at the end of FY2025?",
+    "expected_answer": "Over 600,000 employees globally",
+    "ground_truth_keywords": [
+      "Over",
+      "600000",
+      "employees",
+      "globally"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-069",
+    "category": "Segment Analysis & Operations",
+    "company": "Reliance Industries",
+    "question": "How much did Reliance invest in New Energy giga factories in Jamnagar?",
+    "expected_answer": "Over \u20b975,000 Cr committed to green hydrogen and solar modules",
+    "ground_truth_keywords": [
+      "Over",
+      "\u20b975000",
+      "committed",
+      "green",
+      "hydrogen"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-070",
+    "category": "Segment Analysis & Operations",
+    "company": "TCS",
+    "question": "What percentage of TCS revenue is derived from digital and cloud services?",
+    "expected_answer": "Over 35% of revenue from cloud migration and digital transformation",
+    "ground_truth_keywords": [
+      "Over",
+      "revenue",
+      "from",
+      "cloud",
+      "migration"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-071",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "TCS",
+    "question": "What is TCS dividend payout policy percentage?",
+    "expected_answer": "Returns 80% to 100% of free cash flow via dividends and share buybacks",
+    "ground_truth_keywords": [
+      "Returns",
+      "100",
+      "free",
+      "cash",
+      "flow"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-072",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "Infosys",
+    "question": "What was Infosys capital return to shareholders in FY2025?",
+    "expected_answer": "Returned over 85% of free cash flow through interim and final dividends",
+    "ground_truth_keywords": [
+      "Returned",
+      "over",
+      "free",
+      "cash",
+      "flow"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-073",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "Reliance Industries",
+    "question": "Did Reliance Industries declare a bonus issue in FY2025?",
+    "expected_answer": "Announced a 1:1 bonus share issue for equity shareholders",
+    "ground_truth_keywords": [
+      "Announced",
+      "1:1",
+      "bonus",
+      "share",
+      "issue"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-074",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "Reliance Industries",
+    "question": "What was Reliance Industries capital expenditure (Capex) in FY2025?",
+    "expected_answer": "Approximately \u20b9130,000 Cr primarily for 5G rollout and retail expansion",
+    "ground_truth_keywords": [
+      "Approximately",
+      "\u20b9130000",
+      "primarily",
+      "for",
+      "rollout"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-075",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "Fidelity Contrafund",
+    "question": "What is Fidelity Contrafund capital gains distribution schedule?",
+    "expected_answer": "Capital gains are typically distributed annually in December",
+    "ground_truth_keywords": [
+      "Capital",
+      "gains",
+      "are",
+      "typically",
+      "distributed"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-076",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "Fidelity Contrafund",
+    "question": "How does FCNTX treat dividend income earned from underlying equities?",
+    "expected_answer": "Reinvested automatically or paid out in cash depending on shareholder election",
+    "ground_truth_keywords": [
+      "Reinvested",
+      "automatically",
+      "paid",
+      "out",
+      "cash"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-077",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "TCS",
+    "question": "What is TCS return on equity (ROE)?",
+    "expected_answer": "Exceeds 45% consistently",
+    "ground_truth_keywords": [
+      "Exceeds",
+      "consistently"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-078",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "Infosys",
+    "question": "What is Infosys return on equity (ROE)?",
+    "expected_answer": "Exceeds 30%",
+    "ground_truth_keywords": [
+      "Exceeds"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-079",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "TCS",
+    "question": "What is the free cash flow yield of TCS?",
+    "expected_answer": "Approximately 4% to 5% of enterprise value",
+    "ground_truth_keywords": [
+      "Approximately",
+      "enterprise",
+      "value"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-080",
+    "category": "Capital Allocation & Shareholder Returns",
+    "company": "Reliance Industries",
+    "question": "Does Reliance Industries generate positive free cash flow after Capex?",
+    "expected_answer": "Free cash flow turned positive as 5G network rollout tapered",
+    "ground_truth_keywords": [
+      "Free",
+      "cash",
+      "flow",
+      "turned",
+      "positive"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-081",
+    "category": "Governance, Audit & Accounting",
+    "company": "Fidelity Contrafund",
+    "question": "Who is the independent registered public accounting firm for Fidelity Contrafund?",
+    "expected_answer": "PricewaterhouseCoopers LLP",
+    "ground_truth_keywords": [
+      "PricewaterhouseCoopers",
+      "LLP"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-082",
+    "category": "Governance, Audit & Accounting",
+    "company": "Reliance Industries",
+    "question": "Who are the joint statutory auditors of Reliance Industries?",
+    "expected_answer": "Deloitte Haskins & Sells LLP and Chaturvedi & Shah LLP",
+    "ground_truth_keywords": [
+      "Deloitte",
+      "Haskins",
+      "Sells",
+      "LLP",
+      "and"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-083",
+    "category": "Governance, Audit & Accounting",
+    "company": "TCS",
+    "question": "Who is the statutory auditor of TCS?",
+    "expected_answer": "B S R & Co. LLP",
+    "ground_truth_keywords": [
+      "Co.",
+      "LLP"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-084",
+    "category": "Governance, Audit & Accounting",
+    "company": "Infosys",
+    "question": "Who is the statutory auditor of Infosys?",
+    "expected_answer": "Deloitte Haskins & Sells LLP",
+    "ground_truth_keywords": [
+      "Deloitte",
+      "Haskins",
+      "Sells",
+      "LLP"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-085",
+    "category": "Governance, Audit & Accounting",
+    "company": "Reliance Industries",
+    "question": "Under which accounting standards does Reliance report its consolidated financials?",
+    "expected_answer": "Indian Accounting Standards (Ind AS) converged with IFRS",
+    "ground_truth_keywords": [
+      "Indian",
+      "Accounting",
+      "Standards",
+      "(Ind",
+      "AS)"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-086",
+    "category": "Governance, Audit & Accounting",
+    "company": "Infosys",
+    "question": "Under which standards does Infosys report to the US SEC on Form 20-F?",
+    "expected_answer": "International Financial Reporting Standards (IFRS) as issued by IASB",
+    "ground_truth_keywords": [
+      "International",
+      "Financial",
+      "Reporting",
+      "Standards",
+      "(IFRS)"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-087",
+    "category": "Governance, Audit & Accounting",
+    "company": "Corporate Governance",
+    "question": "What is the Board composition requirement for independent directors in India?",
+    "expected_answer": "At least 50% independent directors when Chairman is executive",
+    "ground_truth_keywords": [
+      "least",
+      "independent",
+      "directors",
+      "when",
+      "Chairman"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-088",
+    "category": "Governance, Audit & Accounting",
+    "company": "Fidelity Contrafund",
+    "question": "Does Fidelity Contrafund have an independent Board of Trustees?",
+    "expected_answer": "Yes, over 75% of trustees are independent of the investment adviser",
+    "ground_truth_keywords": [
+      "Yes",
+      "over",
+      "trustees",
+      "are",
+      "independent"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-089",
+    "category": "Governance, Audit & Accounting",
+    "company": "TCS",
+    "question": "What internal financial control opinions were issued by TCS auditors?",
+    "expected_answer": "Unqualified clean audit opinion on internal financial controls over reporting",
+    "ground_truth_keywords": [
+      "Unqualified",
+      "clean",
+      "audit",
+      "opinion",
+      "internal"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-090",
+    "category": "Governance, Audit & Accounting",
+    "company": "Reliance Industries",
+    "question": "What related party transaction policies are enforced by Reliance Industries?",
+    "expected_answer": "Prior approval of the Audit Committee and shareholders approval where threshold exceeded",
+    "ground_truth_keywords": [
+      "Prior",
+      "approval",
+      "the",
+      "Audit",
+      "Committee"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-091",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "Reliance Industries",
+    "question": "What is Reliance net zero carbon emissions target year?",
+    "expected_answer": "2035",
+    "ground_truth_keywords": [
+      "2035"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-092",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "TCS",
+    "question": "What is TCS goal for renewable energy usage in operations?",
+    "expected_answer": "Achieve 70% renewable energy by 2030",
+    "ground_truth_keywords": [
+      "Achieve",
+      "renewable",
+      "energy",
+      "2030"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-093",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "Infosys",
+    "question": "Is Infosys carbon neutral?",
+    "expected_answer": "Yes, Infosys achieved carbon neutrality in 2020 ahead of Paris Agreement",
+    "ground_truth_keywords": [
+      "Yes",
+      "Infosys",
+      "achieved",
+      "carbon",
+      "neutrality"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-094",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "Fidelity Contrafund",
+    "question": "Does Fidelity Contrafund follow an ESG exclusion screen?",
+    "expected_answer": "No strict negative screens, but considers material ESG factors in risk analysis",
+    "ground_truth_keywords": [
+      "strict",
+      "negative",
+      "screens",
+      "but",
+      "considers"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-095",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "Reliance Industries",
+    "question": "What is Reliance target for green hydrogen production cost?",
+    "expected_answer": "Targeting  per kilogram within 10 years",
+    "ground_truth_keywords": [
+      "Targeting",
+      "per",
+      "kilogram",
+      "within",
+      "years"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-096",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "TCS",
+    "question": "How many hours of digital training did TCS provide to employees in FY2025?",
+    "expected_answer": "Over 50 million learning hours across AI and cloud technologies",
+    "ground_truth_keywords": [
+      "Over",
+      "million",
+      "learning",
+      "hours",
+      "across"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-097",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "Infosys",
+    "question": "What is Infosys gender diversity percentage in its workforce?",
+    "expected_answer": "Women constitute over 39% of total workforce",
+    "ground_truth_keywords": [
+      "Women",
+      "constitute",
+      "over",
+      "total",
+      "workforce"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-098",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "Reliance Industries",
+    "question": "What water positivity commitments has Reliance made in manufacturing?",
+    "expected_answer": "Zero liquid discharge across major petrochemical sites",
+    "ground_truth_keywords": [
+      "Zero",
+      "liquid",
+      "discharge",
+      "across",
+      "major"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-099",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "Fidelity Contrafund",
+    "question": "How does Fidelity vote on shareholder environmental proposals?",
+    "expected_answer": "Evaluated on case-by-case basis based on economic value to shareholders",
+    "ground_truth_keywords": [
+      "Evaluated",
+      "case-by-case",
+      "basis",
+      "based",
+      "economic"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  },
+  {
+    "id": "GOLDEN-100",
+    "category": "Sustainability, ESG & Strategic Outlook",
+    "company": "TCS",
+    "question": "What is the 3-year outlook for Indian IT services demand according to TCS management?",
+    "expected_answer": "Driven by cloud migration, AI agentic modernization, and digital enterprise transformation",
+    "ground_truth_keywords": [
+      "Driven",
+      "cloud",
+      "migration",
+      "agentic",
+      "modernization"
+    ],
+    "evaluation_criteria": {
+      "min_faithfulness": 0.9,
+      "require_citation": true,
+      "max_latency_ms": 3000
+    }
+  }
+]

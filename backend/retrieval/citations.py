@@ -34,7 +34,7 @@ class CitationEnforcer:
     to cite every factual claim. Parses citations back from the response.
     """
 
-    CITATION_PATTERN = re.compile(r"\[SOURCE:(\d+)\]")
+    CITATION_PATTERN = re.compile(r"[\[【]\s*SOURCE:\s*(\d+)\s*[\]】]", re.IGNORECASE)
 
     # Minimum fraction of sentences that must have a citation
     MIN_CITATION_DENSITY = 0.3

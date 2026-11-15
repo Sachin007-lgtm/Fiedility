@@ -6,7 +6,7 @@ import {
   Send, Loader2, Plus, MessageSquare,
   Paperclip, Brain, Trash2, X, Globe, Upload,
   Sparkles, FileText, ExternalLink, ChevronRight,
-  Zap, RefreshCw
+  Zap, RefreshCw, Calculator
 } from 'lucide-react';
 import Layout from '../components/Layout';
 
@@ -28,6 +28,18 @@ interface Message {
   content: string;
   time: string;
   citations?: { internal: Citation[]; web: Citation[] };
+  financial_computation?: {
+    calculation_type?: string;
+    company?: string;
+    metric?: string;
+    period_1?: string;
+    period_2?: string;
+    value_1?: number;
+    value_2?: number;
+    unit?: string;
+    result?: any;
+    verified_statement?: string;
+  };
   traceInfo?: {
     latency_ms?: number;
     cost_usd?: number;
@@ -232,6 +244,7 @@ export default function ResearchWorkspace() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          query: q,
           question: q,
           session_id: activeId,
           use_web_search: useWebSearch,
@@ -258,6 +271,7 @@ export default function ResearchWorkspace() {
         type: 'assistant',
         content: data.answer,
         time: formatTime(),
+        financial_computation: data.financial_computation,
         citations: {
           internal: internalCitations,
           web: data.web_citations || []
@@ -498,10 +512,26 @@ export default function ResearchWorkspace() {
                           }`}
                         >
                           {msg.type === 'assistant' ? (
-                            <div className="prose dark:prose-invert max-w-none text-sm prose-p:leading-relaxed prose-p:my-2 dark:prose-headings:text-white prose-headings:text-slate-900 dark:prose-strong:text-white prose-strong:text-slate-900 prose-code:bg-black/10 dark:prose-code:bg-white/10 dark:prose-code:text-[#00d2ff] prose-code:text-[#3D81E3] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs">
-                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {msg.content.replace(/\[SOURCE:\s*(\d+)\]/gi, '**[Source: $1]**')}
-                              </ReactMarkdown>
+                            <div>
+                              {msg.financial_computation && (
+                                <div className="mb-3.5 p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 text-xs shadow-xs">
+                                  <div className="flex items-center gap-2 font-semibold mb-1">
+                                    <Calculator className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                                    <span>{msg.financial_computation.calculation_type || 'Verified Financial Calculation'}</span>
+                                    <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 font-mono font-bold tracking-wider">
+                                      AUDITED PYTHON MATH
+                                    </span>
+                                  </div>
+                                  <p className="text-[11px] leading-relaxed font-mono opacity-95">
+                                    {msg.financial_computation.verified_statement}
+                                  </p>
+                                </div>
+                              )}
+                              <div className="prose dark:prose-invert max-w-none text-sm prose-p:leading-relaxed prose-p:my-2 dark:prose-headings:text-white prose-headings:text-slate-900 dark:prose-strong:text-white prose-strong:text-slate-900 prose-code:bg-black/10 dark:prose-code:bg-white/10 dark:prose-code:text-[#00d2ff] prose-code:text-[#3D81E3] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs">
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                  {msg.content.replace(/\[SOURCE:\s*(\d+)\]/gi, '**[Source: $1]**')}
+                                </ReactMarkdown>
+                              </div>
                             </div>
                           ) : (
                             <p className="whitespace-pre-wrap">{msg.content}</p>

@@ -9,6 +9,7 @@ backend/.env
 backend/out.txt
 *.sqlite3
 *.db
+*eval_report.json
 .env
 
 # Node / Frontend
