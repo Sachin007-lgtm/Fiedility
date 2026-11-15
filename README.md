@@ -1,4 +1,4 @@
-# ALFA CORE — Institutional RAG Research Platform
+# Finsight — Institutional RAG Research Platform
 
 > A production-grade, full-stack **Retrieval-Augmented Generation** platform built for institutional financial research. Upload fund prospectuses, ask natural-language questions, and get precise, cited answers powered by a hybrid BM25 + vector retrieval pipeline with cross-encoder reranking and full observability.
 
@@ -24,7 +24,7 @@
 - **Citation density** and pass-rate quality metrics
 - Live monitoring dashboard at `/monitoring`
 
-### 🎨 Institutional UI (ALFA CORE Design System)
+### 🎨 Institutional UI (Finsight Design System)
 - ChatGPT/Claude-style research workspace with typewriter responses
 - Document Library with searchable catalog and status badges
 - Ingestion Pipeline with live log stream and worker node monitoring

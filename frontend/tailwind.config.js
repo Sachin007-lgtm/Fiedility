@@ -10,6 +10,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        brand: {
+          DEFAULT: "#3D81E3",
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3D81E3",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          glow: "rgba(61, 129, 227, 0.35)",
+        },
         // Institutional Intelligence design system
         "error": "#ffb4ab",
         "surface-dim": "#10131a",

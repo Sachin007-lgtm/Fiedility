@@ -116,7 +116,7 @@ export default function App() {
             transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 text-white/60 max-w-md text-base leading-[1.5]"
           >
-            Fidelity RAG is the premier research platform for the current era. It leverages powerful AI to analyze, prioritize, and refine your prospectuses into total clarity.
+            Finsight is the premier research platform for the current era. It leverages powerful AI to analyze, prioritize, and refine your prospectuses into total clarity.
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -124,7 +124,7 @@ export default function App() {
             transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 flex flex-col items-center gap-4"
           >
-            <AppleButton label="Try Fidelity RAG" />
+            <AppleButton label="Try Finsight" />
             <span className="text-xs text-white/40">Download for Intel / Apple Silicon</span>
           </motion.div>
         </section>
@@ -139,7 +139,7 @@ export default function App() {
           <div className="max-w-6xl mx-auto px-6 h-full flex items-center justify-between text-xs">
             <div className="flex items-center gap-4">
               <AppleLogo className="w-3.5 h-3.5" />
-              <span className="font-bold text-white">Fidelity RAG</span>
+              <span className="font-bold text-white">Finsight</span>
               {['File', 'Edit', 'View', 'Go', 'Window', 'Help'].map((item, i) => (
                 <span key={item} className={`text-white/80 hover:text-white cursor-default ${i > 2 ? 'hidden sm:inline' : ''} ${i > 3 ? 'hidden md:inline' : ''}`}>
                   {item}
@@ -168,7 +168,7 @@ export default function App() {
                 <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
                 <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
               </div>
-              <div className="flex-1 text-center text-xs text-white/50">Fidelity RAG — Research</div>
+              <div className="flex-1 text-center text-xs text-white/50">Finsight — Research</div>
             </div>
 
             {/* Body */}
@@ -270,7 +270,7 @@ export default function App() {
                   <div className="rounded-lg border border-[#A4F4FD]/20 bg-[#A4F4FD]/5 p-4 mb-6">
                     <div className="flex items-center gap-2 text-[#A4F4FD] text-xs font-semibold mb-2">
                       <Sparkles className="w-3.5 h-3.5" />
-                      Summary by Fidelity RAG
+                      Summary by Finsight
                     </div>
                     <div className="text-sm text-[#A4F4FD]/80 leading-relaxed">
                       Your team closed 23 issues, merged 14 PRs, and shipped 2 features. Top contributor: Marcus. No action needed.
@@ -372,7 +372,7 @@ export default function App() {
         <section className="max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-white/10">
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { text: "Fidelity RAG gave our leadership team four hours of their week back. It reads like research from the future.", author: "Parker Wilf", role: "Group Product Manager", company: "MERCURY" },
+              { text: "Finsight gave our leadership team four hours of their week back. It reads like research from the future.", author: "Parker Wilf", role: "Group Product Manager", company: "MERCURY" },
               { text: "The command palette alone has changed how I process messages. I can't imagine going back to a traditional client.", author: "Andrew von Rosenbach", role: "Senior Engineering Program Manager", company: "COHERE" },
               { text: "Analysis that actually understands context. Our team stopped dreading Monday morning inboxes.", author: "Mathies Christensen", role: "Engineering Manager", company: "LUNAR" }
             ].map((t, i) => (

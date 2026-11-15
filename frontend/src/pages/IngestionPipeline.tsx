@@ -1,179 +1,249 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+import { 
+  Cpu, 
+  Layers, 
+  FileText, 
+  Terminal, 
+  Pause, 
+  Play, 
+  Zap, 
+} from 'lucide-react';
 import Layout from '../components/Layout';
 
-interface LogEntry { id: number; time: string; level: 'INFO'|'DEBUG'|'SUCCESS'|'WARN'; message: string; }
+interface LogEntry {
+  id: number;
+  time: string;
+  level: 'INFO' | 'DEBUG' | 'SUCCESS' | 'WARN';
+  message: string;
+}
 
 const INIT_LOGS: LogEntry[] = [
-  { id:1, time:'14:22:01', level:'INFO', message:'Initializing PDF worker pool (size=8)...' },
-  { id:2, time:'14:22:03', level:'INFO', message:'Fetching document: s3://vault-01/financial_reports_2024_q3.pdf' },
-  { id:3, time:'14:22:04', level:'DEBUG', message:'Page 1-12 parsed. OCR layer detected.' },
-  { id:4, time:'14:22:06', level:'INFO', message:'Chunking complete. 142 segments generated.' },
-  { id:5, time:'14:22:08', level:'SUCCESS', message:'Batch embedding sent to inference endpoint.' },
-  { id:6, time:'14:22:10', level:'INFO', message:"Upserting 142 vectors to ChromaDB collection 'market-v1'." },
-  { id:7, time:'14:22:12', level:'WARN', message:'Latency spike detected in ChromaDB upsert (420ms).' },
-  { id:8, time:'14:22:15', level:'INFO', message:'Document doc_id_7782 fully ingested.' },
+  { id: 1, time: '14:22:01', level: 'INFO', message: 'Finsight pipeline worker pool initialized (4 worker threads).' },
+  { id: 2, time: '14:22:03', level: 'INFO', message: 'Loaded PyMuPDF layout-aware engine with vector extraction.' },
+  { id: 3, time: '14:22:04', level: 'DEBUG', message: 'SentenceTransformers loaded: all-MiniLM-L6-v2 (CPU execution).' },
+  { id: 4, time: '14:22:06', level: 'INFO', message: 'Inverted index BM25Okapi ready for hybrid reciprocal rank fusion.' },
+  { id: 5, time: '14:22:08', level: 'SUCCESS', message: 'Cross-encoder warmup completed: ms-marco-MiniLM-L-6-v2.' },
+  { id: 6, time: '14:22:10', level: 'INFO', message: 'Tracer registered with OpenTelemetry format (p50/p95 latency ring-buffer).' },
+  { id: 7, time: '14:22:12', level: 'SUCCESS', message: 'DuckDuckGo search client (DDGS) active for web augmentation.' },
 ];
 
-const levelColor: Record<string,string> = {
-  INFO:'text-white/40', DEBUG:'text-[#adc6ff]',
-  SUCCESS:'text-[#44e2cd]', WARN:'text-red-400',
+const LEVEL_COLOR: Record<string, string> = {
+  INFO: 'text-slate-400 dark:text-white/60',
+  DEBUG: 'text-[#3D81E3] dark:text-[#adc6ff]',
+  SUCCESS: 'text-emerald-400 dark:text-[#00d2ff]',
+  WARN: 'text-amber-400',
 };
 
-const workers = [
-  { id:'CORE_W_01', status:'BUSY', cpu:78, task:'PDF_EXTRACTION' },
-  { id:'CORE_W_02', status:'BUSY', cpu:92, task:'EMBEDDING_GEN' },
-  { id:'CORE_W_03', status:'IDLE', cpu:2,  task:null },
-  { id:'CORE_W_04', status:'BUSY', cpu:55, task:'CHUNKING' },
-];
-
-function now() { return new Date().toLocaleTimeString('en-US',{hour12:false}); }
+function now() {
+  return new Date().toLocaleTimeString('en-US', { hour12: false });
+}
 
 export default function IngestionPipeline() {
   const [running, setRunning] = useState(true);
   const [logs, setLogs] = useState<LogEntry[]>(INIT_LOGS);
-  const [pdfPct, setPdfPct] = useState(75);
+  const [pdfPct, setPdfPct] = useState(82);
+  const [totalChunks, setTotalChunks] = useState(142);
   const logEnd = useRef<HTMLDivElement>(null);
+
+  // Poll backend health for real numbers
+  useEffect(() => {
+    fetch('http://localhost:8000/health')
+      .then(res => res.json())
+      .then(data => {
+        if (data.total_chunks_indexed) {
+          setTotalChunks(data.total_chunks_indexed);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!running) return;
     const msgs = [
-      'Processing chunk batch...',
-      `Embedding latency: ${(Math.random()*30+10).toFixed(0)}ms`,
-      `Vector upsert confirmed. Count: ${Math.floor(Math.random()*50+100)}`,
+      'Normalizing document text & stripping PDF artifacts...',
+      'Generating dense sentence embeddings: batch size 32...',
+      'Computing BM25 token frequencies for session corpus...',
+      'Indexing chunk segments into Reciprocal Rank Fusion matrix...',
+      'Cross-encoder candidate scoring pipeline nominal (<85ms latency)...',
+      'Observability: recorded memory checkpoint on worker_01...',
     ];
     const iv = setInterval(() => {
-      setLogs(p => [...p.slice(-40), { id:p.length+1, time:now(), level:'INFO', message:msgs[Math.floor(Math.random()*msgs.length)] }]);
-      setPdfPct(p => Math.min(100, p + Math.random()*3));
-    }, 1800);
+      setLogs(prev => [
+        ...prev.slice(-60),
+        {
+          id: Date.now(),
+          time: now(),
+          level: Math.random() > 0.85 ? 'SUCCESS' : Math.random() > 0.95 ? 'WARN' : 'INFO',
+          message: msgs[Math.floor(Math.random() * msgs.length)],
+        },
+      ]);
+      setPdfPct(p => (p >= 100 ? 60 : p + Math.floor(Math.random() * 5 + 1)));
+    }, 2400);
+
     return () => clearInterval(iv);
   }, [running]);
 
-  useEffect(() => { logEnd.current?.scrollIntoView({behavior:'smooth'}); }, [logs]);
+  useEffect(() => {
+    logEnd.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [logs]);
 
   return (
     <Layout title="Pipeline">
-      <div className="flex flex-col h-full bg-[#0d0d0d] overflow-hidden">
-        <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b border-white/[0.06] shrink-0">
+      <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-6 pb-20">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-semibold text-white tracking-tight">Ingestion Pipeline</h1>
-            <p className="text-white/40 text-sm mt-1">Real-time visualization of document vectorization.</p>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3D81E3]/20 border border-[#3D81E3]/30 text-[#3D81E3] dark:text-[#adc6ff] text-xs font-semibold uppercase tracking-wider mb-2">
+              <Cpu className="w-3.5 h-3.5" />
+              Vector Engine
+            </div>
+            <h1 className="text-2xl md:text-3xl font-extrabold dark:text-white text-slate-900 tracking-tight">
+              Ingestion & Retrieval Pipeline
+            </h1>
+            <p className="dark:text-white/50 text-slate-500 text-sm mt-1">
+              Real-time telemetry of document ingestion, hybrid chunking, and cross-encoder reranking.
+            </p>
           </div>
-          <div className="flex gap-3">
-            <button onClick={() => setRunning(false)} className="bg-[#171717] text-white/80 px-4 py-2 rounded-lg border border-white/10 flex items-center gap-2 hover:bg-white/[0.04] transition-colors text-sm">
-              <span className="material-symbols-outlined text-[18px]">pause</span> Pause
-            </button>
-            <button onClick={() => setRunning(true)} className="bg-white text-black px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-white/90 transition-colors text-sm font-semibold">
-              <span className="material-symbols-outlined text-[18px]">play_arrow</span> Resume
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setRunning(r => !r)}
+              className={`px-4 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 transition-all shadow-sm ${
+                running
+                  ? 'dark:border-white/15 dark:bg-white/5 dark:text-white/80 border-slate-300 bg-white text-slate-700 hover:bg-slate-100 dark:hover:bg-white/10'
+                  : 'border-[#3D81E3]/50 bg-[#3D81E3]/20 text-[#3D81E3] dark:text-[#adc6ff]'
+              }`}
+            >
+              {running ? <><Pause className="w-3.5 h-3.5" /> Pause Stream</> : <><Play className="w-3.5 h-3.5" /> Resume Stream</>}
             </button>
           </div>
         </div>
 
-        <div className="flex flex-1 overflow-hidden">
-          <div className="flex-1 flex flex-col p-6 space-y-6 overflow-y-auto">
-            {/* Pipeline stages */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 shrink-0">
-              {[
-                { label:'PDF Loading', icon:'picture_as_pdf', color:'#adc6ff', layer:'01', desc:'Parsing docs and OCR extraction.', content:(
-                  <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                    <motion.div className="bg-[#adc6ff] h-full rounded-full" animate={{width:`${pdfPct}%`}} transition={{duration:0.8}} />
-                  </div>
-                )},
-                { label:'Semantic Chunking', icon:'content_cut', color:'#44e2cd', layer:'02', desc:'Recursive splitting with 512 token overlap.', content:(
-                  <div className="flex gap-1 justify-center">
-                    {[0.2,0.4,0.6,1,0.2].map((o,i) => <div key={i} className="w-5 h-5 bg-[#44e2cd] rounded-sm" style={{opacity:o}} />)}
-                  </div>
-                )},
-                { label:'Embedding', icon:'hub', color:'#adc6ff', layer:'03', desc:'Generating 768d vectors via Sentence-Transformers.', content:(
-                  <div className="grid grid-cols-4 gap-2 w-full">
-                    {[0.2,0.8,0.4,0.1].map((o,i) => <div key={i} className="h-1 bg-[#adc6ff] rounded-full" style={{opacity:o}} />)}
-                  </div>
-                )},
-              ].map(({ label, icon, color, layer, desc, content }) => (
-                <motion.div key={layer} initial={{opacity:0,y:20}} animate={{opacity:1,y:0}}
-                  className={`bg-[#171717] border border-white/10 rounded-2xl p-6 relative transition-all`}>
-                  <div className="absolute -top-3 left-6 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest" style={{backgroundColor: color, color: '#000'}}>LAYER {layer}</div>
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{backgroundColor: `${color}1A`, color: color}}>
-                      <span className="material-symbols-outlined text-4xl" style={{fontVariationSettings:"'FILL' 1"}}>{icon}</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-white">{label}</h3>
-                    <p className="text-white/40 text-sm">{desc}</p>
-                    {content}
-                  </div>
-                </motion.div>
-              ))}
+        {/* ── Pipeline Layers ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Layer 1: Extraction */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="liquid-glass rounded-2xl p-6 border dark:border-white/10 border-slate-200 shadow-sm relative overflow-hidden"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase bg-[#3D81E3]/20 text-[#3D81E3] dark:text-[#adc6ff] border border-[#3D81E3]/30">
+                LAYER 01
+              </span>
+              <FileText className="w-5 h-5 text-[#3D81E3]" />
+            </div>
+            <h3 className="text-base font-bold dark:text-white text-slate-900 mb-1">PyMuPDF Parsing</h3>
+            <p className="text-xs dark:text-white/50 text-slate-500 mb-4 leading-relaxed">
+              Extracts text blocks and page numbers directly from SEC prospectus PDFs without cloud latency.
+            </p>
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-[11px] font-mono">
+                <span className="dark:text-white/40 text-slate-400">Throughput Buffer</span>
+                <span className="text-[#3D81E3] dark:text-[#00d2ff] font-semibold">{pdfPct}%</span>
+              </div>
+              <div className="w-full dark:bg-white/5 bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                <motion.div
+                  className="bg-gradient-to-r from-[#3D81E3] to-[#00d2ff] h-full rounded-full"
+                  animate={{ width: `${pdfPct}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Layer 2: Semantic Chunking */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="liquid-glass rounded-2xl p-6 border dark:border-white/10 border-slate-200 shadow-sm relative overflow-hidden"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase bg-[#00d2ff]/20 text-[#0284c7] dark:text-[#00d2ff] border border-[#00d2ff]/30">
+                LAYER 02
+              </span>
+              <Layers className="w-5 h-5 text-[#00d2ff]" />
+            </div>
+            <h3 className="text-base font-bold dark:text-white text-slate-900 mb-1">Recursive Chunking</h3>
+            <p className="text-xs dark:text-white/50 text-slate-500 mb-4 leading-relaxed">
+              512-character token slicing with 64-character window overlap preserving financial context.
+            </p>
+            <div className="flex items-center justify-between p-2 rounded-xl dark:bg-white/[0.03] bg-slate-100 border dark:border-white/5 border-slate-200 text-[11px] font-mono">
+              <span className="dark:text-white/40 text-slate-500">Total Indexed Chunks</span>
+              <span className="text-[#0284c7] dark:text-[#00d2ff] font-bold">{totalChunks} chunks</span>
+            </div>
+          </motion.div>
+
+          {/* Layer 3: Hybrid Retrieval */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="liquid-glass rounded-2xl p-6 border dark:border-white/10 border-slate-200 shadow-sm relative overflow-hidden"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30">
+                LAYER 03
+              </span>
+              <Zap className="w-5 h-5 text-purple-500" />
+            </div>
+            <h3 className="text-base font-bold dark:text-white text-slate-900 mb-1">BM25 + Dense RRF</h3>
+            <p className="text-xs dark:text-white/50 text-slate-500 mb-4 leading-relaxed">
+              Reciprocal Rank Fusion fuses sparse keyword ranks (BM25) with 384d vectors, reranked by ms-marco.
+            </p>
+            <div className="flex items-center justify-between p-2 rounded-xl dark:bg-white/[0.03] bg-slate-100 border dark:border-white/5 border-slate-200 text-[11px] font-mono">
+              <span className="dark:text-white/40 text-slate-500">RRF Fusion Formula</span>
+              <span className="text-purple-600 dark:text-purple-300 font-bold">1 / (60 + rank)</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ── Terminal Log Console ── */}
+        <div className="rounded-2xl border dark:border-white/10 border-slate-800 overflow-hidden shadow-2xl flex flex-col h-[400px]">
+          {/* Terminal Title Bar */}
+          <div className="px-5 py-3 border-b border-white/10 bg-[#0f1117] flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+                <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
+                <span className="w-3 h-3 rounded-full bg-[#28c840]" />
+              </div>
+              <span className="text-xs font-mono font-semibold text-white/80 ml-2 flex items-center gap-2">
+                <Terminal className="w-3.5 h-3.5 text-[#3D81E3]" />
+                finsight-pipeline-stream.log
+              </span>
             </div>
 
-            {/* Live log */}
-            <div className="flex-1 flex flex-col bg-[#171717] border border-white/10 rounded-2xl overflow-hidden min-h-[240px]">
-              <div className="bg-white/[0.02] px-5 py-3 border-b border-white/5 flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  {running && <span className="w-2 h-2 rounded-full bg-[#44e2cd] animate-pulse" />}
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-white/80">Live Execution Logs</span>
-                </div>
-                <div className="flex gap-4 text-[11px] text-white/40">
-                  <span>Errors: 0</span><span>Warnings: 2</span><span>Throughput: 1.2k tok/s</span>
-                </div>
-              </div>
-              <div className="flex-1 p-5 font-mono text-xs overflow-y-auto space-y-2 bg-black/40">
-                {logs.map(log => (
-                  <p key={log.id} className={levelColor[log.level]}>
-                    <span className="text-[#adc6ff] mr-3">[{log.time}]</span>
-                    <span className="mr-2 opacity-70">{log.level}:</span>{log.message}
-                  </p>
-                ))}
-                {running && <p className="flex items-center gap-2 text-white/30 mt-2"><span className="text-[#adc6ff]">[{now()}]</span><span className="w-1.5 h-3 bg-[#adc6ff] animate-pulse" />Awaiting next task...</p>}
-                <div ref={logEnd} />
-              </div>
+            <div className="flex items-center gap-4 text-[11px] font-mono text-white/50">
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live Socket
+              </span>
+              <span>4 Threads Nominal</span>
             </div>
           </div>
 
-          {/* Worker side panel */}
-          <aside className="w-80 bg-[#171717] border-l border-white/[0.06] p-6 flex flex-col space-y-8 overflow-y-auto hidden xl:flex shrink-0">
-            <div>
-              <h2 className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-4">
-                Worker Nodes ({workers.filter(w=>w.status==='BUSY').length}/{workers.length})
-              </h2>
-              <div className="space-y-3">
-                {workers.map(w => (
-                  <div key={w.id} className={`p-3 bg-white/[0.02] rounded-lg border-l-4 ${w.status==='BUSY'?'border-[#44e2cd]':'border-white/20'}`}>
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="font-bold text-sm text-white">{w.id}</span>
-                      <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${w.status==='BUSY'?'bg-[#44e2cd]/10 text-[#44e2cd]':'bg-white/10 text-white/60'}`}>{w.status}</span>
-                    </div>
-                    <div className="flex justify-between text-[11px] mb-1.5"><span className="text-white/40">CPU Usage</span><span className="text-white/80">{w.cpu}%</span></div>
-                    <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
-                      <div className={`h-full ${w.status==='BUSY'?'bg-[#44e2cd]':'bg-white/20'}`} style={{width:`${w.cpu}%`}} />
-                    </div>
-                    {w.task && <div className="text-[11px] text-white/40 mt-2 truncate">Task: {w.task}</div>}
-                  </div>
-                ))}
+          {/* Terminal Output */}
+          <div className="flex-1 p-5 font-mono text-xs overflow-y-auto space-y-2 bg-[#090a0d]">
+            {logs.map(log => (
+              <div key={log.id} className="flex items-start gap-3 leading-relaxed">
+                <span className="text-white/40 shrink-0 font-mono">[{log.time}]</span>
+                <span className={`font-bold shrink-0 ${LEVEL_COLOR[log.level]}`}>
+                  {log.level.padEnd(7)}
+                </span>
+                <span className="text-slate-200">{log.message}</span>
               </div>
-            </div>
-            <div>
-              <h2 className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-4">Pipeline Health</h2>
-              <div className="space-y-4">
-                {[{icon:'speed',label:'Avg. Latency',value:'142ms',color:'text-[#adc6ff]'},{icon:'description',label:'Daily Volume',value:'4.2k Docs',color:'text-[#44e2cd]'}].map(s=>(
-                  <div key={s.label} className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center ${s.color}`}>
-                      <span className="material-symbols-outlined text-[20px]">{s.icon}</span>
-                    </div>
-                    <div>
-                      <div className="text-[11px] text-white/40">{s.label}</div>
-                      <div className="text-xl font-bold text-white">{s.value}</div>
-                    </div>
-                  </div>
-                ))}
+            ))}
+            {running && (
+              <div className="flex items-center gap-2 text-white/40 text-[11px] pt-1">
+                <span className="w-1.5 h-3 bg-[#3D81E3] animate-pulse" />
+                Listening for next batch event…
               </div>
-            </div>
-            <div className="mt-auto bg-[#adc6ff]/10 p-4 rounded-xl border border-[#adc6ff]/20">
-              <h3 className="font-bold text-[#adc6ff] mb-2 flex items-center gap-2 text-sm">
-                <span className="material-symbols-outlined text-[18px]">bolt</span> GPU Acceleration
-              </h3>
-              <p className="text-[11px] text-white/60 leading-relaxed">Running on local GPU via Sentence-Transformers for optimized throughput.</p>
-            </div>
-          </aside>
+            )}
+            <div ref={logEnd} />
+          </div>
         </div>
       </div>
     </Layout>

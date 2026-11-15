@@ -7,6 +7,8 @@ backend/chroma_db/
 backend/temp_uploads/
 backend/.env
 backend/out.txt
+*.sqlite3
+*.db
 .env
 
 # Node / Frontend
